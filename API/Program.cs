@@ -26,6 +26,19 @@ builder.Services.AddDbContextPool<MySQLContext>(options =>
  
 builder.Services.AddControllersWithViews();
 
+var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        builder   => builder.WithOrigins(
+                "http://localhost:8080",
+                "localhost:8080")
+            .AllowAnyMethod()
+            .AllowAnyOrigin()
+            .AllowAnyHeader());
+});
+
+
 
  
 var app = builder.Build();
@@ -44,10 +57,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
  
 app.UseRouting();
+
+app.UseCors(MyAllowSpecificOrigins);
  
 app.UseAuthorization();
- 
- 
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
