@@ -41,10 +41,18 @@ namespace API.Repository
 
         public async Task<ProductVO> Update(ProductVO vo)
         {
-            Product product = _mapper.Map<Product>(vo);
-            _context.Products.Update(product);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<ProductVO>(product);
+            try
+            {
+                Product product = _mapper.Map<Product>(vo);
+                _context.Products.Update(product);
+                await _context.SaveChangesAsync();
+                return _mapper.Map<ProductVO>(product);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public async Task<bool> Delete(long id)
@@ -61,7 +69,6 @@ namespace API.Repository
             {
                 return false;
             }
-            throw new NotImplementedException();
         }
     }
 }
