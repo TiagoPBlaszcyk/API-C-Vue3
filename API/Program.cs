@@ -53,7 +53,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
 }
 app.UseHttpsRedirection();
- 
+
 app.UseStaticFiles();
  
 app.UseRouting();
@@ -67,5 +67,10 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.UseSwagger(x => x.SerializeAsV2 = true);
+
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("v1/swagger.json", "MyAPI V1");
+});
  
 app.Run();

@@ -1,27 +1,27 @@
 <template>
-  <div class="home">
+  <div class='home'>
     <p>Meus Produtos</p>
-    <template v-for="(prop, name, index) in value" :key="index">
+    <div v-for='(prop, name, index) in value' v-bind:key='index'>
       <template v-if="typeof prop == 'number'">
         <p>{{ name }}</p>
-        <InputNumber mode="decimal" :minFractionDigits="2" locale="pt-BR" v-model="value[name]" />
+        <InputNumber mode='decimal' :minFractionDigits='2' locale='pt-BR' v-model='value[name]' />
       </template>
       <template v-else>
         <p>{{ name }}</p>
-        <InputText type="text" v-model="value[name]" />
+        <InputText type='text' v-model='value[name]' />
       </template>
-    </template>
-    <Button label="Save" @click="submitSave" />
-    <Button label="EditPrice" @click="submitEdit" />
-    <Button label="Delete" @click="submitDelete" />
-    <Button label="console.log(Current)" @click="log" />
+    </div>
+    <Button label='Save' @click='submitSave' />
+    <Button label='EditPrice' @click='submitEdit' />
+    <Button label='Delete' @click='submitDelete' />
+    <Button label='console.log(Current)' @click='log' />
 
     <p>Lista de Produtos no banco</p>
-    <p v-for="value in result" :key="value.id">{{ value }}</p>
+    <p v-for='value in result' :key='value.id'>{{ value }}</p>
   </div>
 </template>
 
-<script lang="ts">
+<script lang='ts'>
 import { defineComponent, onMounted, ref } from 'vue'
 import api from '@/service'
 import InputText from 'primevue/inputtext'
