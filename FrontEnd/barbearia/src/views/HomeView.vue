@@ -1,22 +1,21 @@
 <template>
   <div class='home'>
-    <p>Tes</p>
     <div v-for='(prop, name, index) in current' :key='index'>
-      <template v-if="typeof prop == 'number' || name === 'id'">
-        <p>{{ name }}</p>
-        <InputNumber mode='decimal' :minFractionDigits='2' :min='0' locale='pt-BR' v-model.number='current[name]' :allow-empty='false' />
-      </template>
-      <template v-else>
-        <p>{{ name }}</p>
+        <p>{{ name }} tem {{ prop }}</p>
         <InputText type='text' v-model='current[name]' />
-      </template>
     </div>
+    <br>
     <Button label='Save' @click='personSave(current)' />
     <Button label='EditPrice' @click='personEdit(current)' />
-    <Button label='Delete' @click='personDelete(current.id)' />
-    <Button label='UpdateList' @click='update()' />
-
+    <Button label='Delete' @click='personDelete(current)' />
+    <hr>
+    <p>GetByID input id com System.Threading.Thread.Sleep(5000); no back end</p>
+    <Button label='GetById' @click='personGet(testeId)' />
+    <InputNumber mode='decimal' v-model.number='testeId'></InputNumber>
+    <p>Resul GetByID > {{result}}</p>
+    <hr>
     <p>Lista de Produtos no banco</p>
+    <Button label='UpdateList' @click='update()' />
     <p v-for='value in list' :key='value.id'>{{ value }}</p>
   </div>
 </template>
@@ -27,7 +26,7 @@ import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import { Person } from '@/models/Person'
 import Button from 'primevue/button'
-import api from '@/service'
+import baseService from '@/service/base.service'
 
 export default defineComponent({
   name: 'HomeView',
@@ -38,79 +37,44 @@ export default defineComponent({
   },
   setup() {
     const current = ref<Person>(new Person())
+    const testeId = ref(19)
+    const result = ref( )
     const list = ref<Array<Person>>([])
+    const controller = 'Person'
 
     onMounted(() => {
       update()
     })
-    function update(){
-      try {
-        api.get('api/v1/Person').then((data) => {
-          list.value = data.data as Array<Person>
-        }).catch((response) => {
-          console.log('Erro personGetAll:', response)
-          Promise.reject(response)
-        })
-      } catch (response) {
+
+    async function update() {
+      (await baseService(controller)).getAll().then((data) => {
+        list.value = data as Array<Person>
+      }).catch((response) => {
         console.log('Erro personGetAll:', response)
-      }
+        Promise.reject(response)
+      })
     }
 
-    // function personGetById(value) {
-    //   try {
-    //     api.get(`api/v1/Person/${value}`, ).then((data) => {
-    //      current.value = data.data as Person
-    //     }).catch((response) => {
-    //       console.log('Erro personGetById:', response)
-    //       Promise.reject(response)
-    //     })
-    //   } catch (response) {
-    //     console.log('Erro personGetById:', response)
-    //   }
-    // }
-
-    function personSave(value) {
-      try {
-        api.post('api/v1/Person', value).then(() => {
-          // return data.data as Person
-          Promise.resolve()
-        }).catch((response) => {
-          console.log('Erro personSave:', response)
-          Promise.reject(response)
-        })
-      } catch (response) {
-        console.log('Erro personSave:', response)
-      }
+    async function personSave(value: Person) {
+      await (await baseService(controller)).saveModel(value)
     }
 
-    function personEdit(value) {
-      try {
-        api.put('api/v1/Person', value).then(() => {
-          // return data.data as Person
-          Promise.resolve()
-        }).catch((response) => {
-          console.log('Erro personEdit:', response)
-          Promise.reject(response)
-        })
-      } catch (response) {
-        console.log('Erro personEdit:', response)
-      }
+    async function personEdit(value: Person) {
+      await (await baseService(controller)).editModel(value)
     }
 
-    function personDelete(value) {
-      try {
-        api.delete(`api/v1/Person/${value}`).then(() => {
-          Promise.resolve()
-        }).catch((response) => {
-          console.log('Erro personDelete:', response)
-          Promise.reject(response)
-        })
-      } catch (response) {
-        console.log('Erro personDelete:', response)
-      }
+    async function personDelete(value: Person) {
+      await (await baseService(controller)).deleteModel(value)
     }
 
-    return { current, list, personDelete, personSave, personEdit, update }
+    async function personGet(value) {
+      await (await baseService(controller)).getById(value).then((data) => {
+        console.log('data', data)
+        result.value = data
+      })
+    }
+
+    return { current, result, list, personDelete, personGet, personSave, personEdit, update, testeId }
   }
 })
 </script>

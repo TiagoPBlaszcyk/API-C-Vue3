@@ -1,6 +1,5 @@
 ﻿using API.Data.ValueObjects;
 using API.Repository;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -26,6 +25,7 @@ namespace API.Controllers
         public async Task<ActionResult<PersonVO>> FindById(long id)
         {
             var product = await _repository.FindById(id);
+            System.Threading.Thread.Sleep(5000);
             if (product == null) return NotFound();
             return Ok(product);
         }
