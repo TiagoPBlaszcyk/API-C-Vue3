@@ -1,7 +1,7 @@
 <template>
   <div class='home'>
     <p>Meus Produtos</p>
-    <div v-for='(prop, name, index) in value' v-bind:key='index'>
+    <div v-for='(prop, name, index) in value' :key='index'>
       <template v-if="typeof prop == 'number'">
         <p>{{ name }}</p>
         <InputNumber mode='decimal' :minFractionDigits='2' locale='pt-BR' v-model='value[name]' />
