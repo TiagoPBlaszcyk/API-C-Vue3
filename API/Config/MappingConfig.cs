@@ -10,8 +10,8 @@ namespace API.Config
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-                config.CreateMap<ProductVO, Product>();
-                config.CreateMap<Product, ProductVO>();
+                config.CreateMap<PersonVO, Person>();
+                config.CreateMap<Person, PersonVO>();
             });
 
             return mappingConfig;

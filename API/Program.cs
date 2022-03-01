@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using API.Config;
 using API.Repository;
 using AutoMapper;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +13,7 @@ IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 
 // Add services to the container.
 string mySqlConnection =

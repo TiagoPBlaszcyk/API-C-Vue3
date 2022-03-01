@@ -9,7 +9,7 @@ namespace API.Model.Context
 
         }
 
-        public DbSet<Product> Products { get; set; }
+        public DbSet<Person> Persons { get; set; }
 
     }
 }

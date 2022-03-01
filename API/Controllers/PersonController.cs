@@ -7,32 +7,31 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class ProductController : ControllerBase
+    public class PersonController : ControllerBase
     {
-        private IProductRepository _repository;
-        public ProductController(IProductRepository repository)
+        private IPersonRepository _repository;
+        public PersonController(IPersonRepository repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductVO>>> FindAll()
+        public async Task<ActionResult<IEnumerable<PersonVO>>> FindAll()
         {
             var products = await _repository.FindAll();
             return Ok(products);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProductVO>> FindById(long id)
+        public async Task<ActionResult<PersonVO>> FindById(long id)
         {
             var product = await _repository.FindById(id);
             if (product == null) return NotFound();
             return Ok(product);
         }
 
-        
         [HttpPost]
-        public async Task<ActionResult<ProductVO>> Create(ProductVO vo)
+        public async Task<ActionResult<PersonVO>> Create(PersonVO vo)
         {
             if (vo == null) return BadRequest();
             var product = await _repository.Create(vo);
@@ -40,7 +39,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<ProductVO>> Update(ProductVO vo)
+        public async Task<ActionResult<PersonVO>> Update(PersonVO vo)
         {
             if (vo == null) return BadRequest();
             var product = await _repository.Update(vo);

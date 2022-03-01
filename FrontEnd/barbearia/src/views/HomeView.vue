@@ -1,33 +1,33 @@
 <template>
   <div class='home'>
-    <p>Meus Produtos</p>
-    <div v-for='(prop, name, index) in value' :key='index'>
-      <template v-if="typeof prop == 'number'">
+    <p>Tes</p>
+    <div v-for='(prop, name, index) in current' :key='index'>
+      <template v-if="typeof prop == 'number' || name === 'id'">
         <p>{{ name }}</p>
-        <InputNumber mode='decimal' :minFractionDigits='2' locale='pt-BR' v-model='value[name]' />
+        <InputNumber mode='decimal' :minFractionDigits='2' :min='0' locale='pt-BR' v-model.number='current[name]' :allow-empty='false' />
       </template>
       <template v-else>
         <p>{{ name }}</p>
-        <InputText type='text' v-model='value[name]' />
+        <InputText type='text' v-model='current[name]' />
       </template>
     </div>
-    <Button label='Save' @click='submitSave' />
-    <Button label='EditPrice' @click='submitEdit' />
-    <Button label='Delete' @click='submitDelete' />
-    <Button label='console.log(Current)' @click='log' />
+    <Button label='Save' @click='personSave(current)' />
+    <Button label='EditPrice' @click='personEdit(current)' />
+    <Button label='Delete' @click='personDelete(current.id)' />
+    <Button label='UpdateList' @click='update()' />
 
     <p>Lista de Produtos no banco</p>
-    <p v-for='value in result' :key='value.id'>{{ value }}</p>
+    <p v-for='value in list' :key='value.id'>{{ value }}</p>
   </div>
 </template>
 
 <script lang='ts'>
 import { defineComponent, onMounted, ref } from 'vue'
-import api from '@/service'
 import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
-import { Product } from '@/models/Product'
+import { Person } from '@/models/Person'
 import Button from 'primevue/button'
+import api from '@/service'
 
 export default defineComponent({
   name: 'HomeView',
@@ -37,51 +37,80 @@ export default defineComponent({
     Button
   },
   setup() {
-    const result = ref([])
-    const value = ref(new Product())
-
-    function update() {
-      api.get('api/v1/Product').then((data) => {
-        console.log(data)
-        result.value = data.data
-      })
-      value.value = new Product()
-    }
-
-    function log() {
-      console.log(value.value)
-    }
+    const current = ref<Person>(new Person())
+    const list = ref<Array<Person>>([])
 
     onMounted(() => {
       update()
     })
-
-    const submitSave = () => {
-      api.post('api/v1/Product', value.value).then((data) => {
-        result.value.push(data as never)
-        update()
-      })
-    }
-
-    const submitEdit = () => {
-      const aux = {
-        id: value.value.id,
-        name: 'MyNameIs',
-        price: 123
+    function update(){
+      try {
+        api.get('api/v1/Person').then((data) => {
+          list.value = data.data as Array<Person>
+        }).catch((response) => {
+          console.log('Erro personGetAll:', response)
+          Promise.reject(response)
+        })
+      } catch (response) {
+        console.log('Erro personGetAll:', response)
       }
-      console.log(aux)
-      api.put('api/v1/Product', aux).then(() => {
-        update()
-      })
     }
 
-    const submitDelete = () => {
-      api.delete(`api/v1/Product/${value.value.id}`).then(() => {
-        update()
-      })
+    // function personGetById(value) {
+    //   try {
+    //     api.get(`api/v1/Person/${value}`, ).then((data) => {
+    //      current.value = data.data as Person
+    //     }).catch((response) => {
+    //       console.log('Erro personGetById:', response)
+    //       Promise.reject(response)
+    //     })
+    //   } catch (response) {
+    //     console.log('Erro personGetById:', response)
+    //   }
+    // }
+
+    function personSave(value) {
+      try {
+        api.post('api/v1/Person', value).then(() => {
+          // return data.data as Person
+          Promise.resolve()
+        }).catch((response) => {
+          console.log('Erro personSave:', response)
+          Promise.reject(response)
+        })
+      } catch (response) {
+        console.log('Erro personSave:', response)
+      }
     }
 
-    return { result, value, log, submitSave, submitDelete, submitEdit }
+    function personEdit(value) {
+      try {
+        api.put('api/v1/Person', value).then(() => {
+          // return data.data as Person
+          Promise.resolve()
+        }).catch((response) => {
+          console.log('Erro personEdit:', response)
+          Promise.reject(response)
+        })
+      } catch (response) {
+        console.log('Erro personEdit:', response)
+      }
+    }
+
+    function personDelete(value) {
+      try {
+        api.delete(`api/v1/Person/${value}`).then(() => {
+          Promise.resolve()
+        }).catch((response) => {
+          console.log('Erro personDelete:', response)
+          Promise.reject(response)
+        })
+      } catch (response) {
+        console.log('Erro personDelete:', response)
+      }
+    }
+
+    return { current, list, personDelete, personSave, personEdit, update }
   }
 })
 </script>

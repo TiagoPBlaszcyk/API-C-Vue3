@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(MySQLContext))]
-    [Migration("20220301003047_Start")]
+    [Migration("20220301010714_Start")]
     partial class Start
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,22 +20,22 @@ namespace API.Migrations
                 .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("API.Model.Product", b =>
+            modelBuilder.Entity("API.Model.Person", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    b.Property<string>("CategoryName")
+                    b.Property<string>("Cpf")
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("category_name");
+                        .HasColumnName("cpf");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)")
-                        .HasColumnName("description");
+                    b.Property<string>("Email")
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)")
+                        .HasColumnName("email");
 
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(300)
@@ -48,13 +48,13 @@ namespace API.Migrations
                         .HasColumnType("varchar(150)")
                         .HasColumnName("name");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal>("WhatsApp")
                         .HasColumnType("decimal(65,30)")
-                        .HasColumnName("price");
+                        .HasColumnName("whats-app");
 
                     b.HasKey("Id");
 
-                    b.ToTable("product");
+                    b.ToTable("person");
                 });
 #pragma warning restore 612, 618
         }
