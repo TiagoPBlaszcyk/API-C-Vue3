@@ -9,6 +9,7 @@ import StyleClass from 'primevue/styleclass'
 import Ripple from 'primevue/ripple'
 import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
+import Listbox from 'primevue/listbox'
 import Button from 'primevue/button'
 
 import 'primevue/resources/themes/vela-blue/theme.css'
@@ -21,6 +22,7 @@ createApp(App)
   .use(PrimeVue, {ripple: true})
   .component('InputText', InputText)
   .component('InputNumber', InputNumber)
+  .component('Listbox', Listbox)
   .component('Button', Button)
   .directive('styleclass', StyleClass)
   .directive('ripple', Ripple)

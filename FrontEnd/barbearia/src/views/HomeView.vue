@@ -16,7 +16,7 @@
     <hr>
     <p>Lista de Produtos no banco</p>
     <Button label='UpdateList' @click='getAll()' />
-    <p v-for='value in list' :key='value.id'>{{ value }}</p>
+    <Listbox :options="list" optionLabel="name"></Listbox>
   </div>
 </template>
 
@@ -29,7 +29,7 @@ export default defineComponent({
   name: 'HomeView',
   components: {},
   setup() {
-    const current = ref<Person>(new Person())
+    const current = ref<Person>(new Person(undefined,'InsertName', 0,'','',''))
     const testeId = ref(1)
     const result = ref( )
     const list = ref<Array<Person>>([])

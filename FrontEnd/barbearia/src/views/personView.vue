@@ -9,14 +9,9 @@
     <Button label='EditPrice' @click='personEdit(current)' />
     <Button label='Delete' @click='personDelete(current)' />
     <hr>
-    <p>GetByID input id com System.Threading.Thread.Sleep(5000); no back end</p>
-    <Button label='GetById' @click='personGet(testeId)' />
-    <InputNumber mode='decimal' v-model.number='testeId'></InputNumber>
-    <p>Resul GetByID > {{result}}</p>
-    <hr>
     <p>Lista de Produtos no banco</p>
     <Button label='UpdateList' @click='getAll()' />
-    <p v-for='value in list' :key='value.id'>{{ value }}</p>
+    <Listbox :options='list' optionLabel='name' @change="change($event)"/>
   </div>
 </template>
 
@@ -24,16 +19,15 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import { Person } from '@/models/Person'
 import baseService from '@/service/base.service'
+import router from '@/router'
 
 export default defineComponent({
   name: 'personView',
   components: {},
   setup() {
-    const current = ref<Person>(new Person())
-    const testeId = ref(19)
-    const result = ref( )
+    const current = ref<Person>(new Person(undefined,'InsertName', 0,'','',''))
     const list = ref<Array<Person>>([])
-    const controller = 'Person'
+    const controller = router.currentRoute.value.path.substring(1)
 
     onMounted(async () => {
       await getAll()
@@ -45,12 +39,6 @@ export default defineComponent({
       }).catch((response) => {
         console.log('Erro personGetAll:', response)
         Promise.reject(response)
-      })
-    }
-
-    async function personGet(value) {
-      await (await baseService(controller)).getById(value).then((data) => {
-        result.value = data as Person
       })
     }
 
@@ -66,7 +54,10 @@ export default defineComponent({
       await (await baseService(controller)).deleteModel(value)
     }
 
-    return { current, result, list, personDelete, personGet, personSave, personEdit, getAll, testeId }
+    async function change(event) {
+       await (await baseService(controller)).deleteModel(event.value)
+    }
+    return { current, list, change, personDelete, personSave, personEdit, getAll }
   }
 })
 </script>
