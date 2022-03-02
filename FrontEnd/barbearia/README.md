@@ -1,6 +1,30 @@
-# barbearia
+# Barbearia
 
-## Project setup
+## Data Base
+Start one DataBase MySQL, after
+in API/appsettings.json
+```
+  "ConnectionStrings": {
+    "DefaultConnection": "SET-YOUR-DATABASE-"
+  }
+```
+Package Manager Console - add tables with
+```
+add-migration Start
+after
+update-database
+```
+** or **
+Open Terminal on project paste
+```
+dotnet tool install --global dotnet-ef
+after
+dotnet ef migrations add Start
+after
+dotnet ef database update
+```
+
+##  Open Front-End
 ```
 npm install
 ```

@@ -1,8 +1,8 @@
 <template>
-  <div class='home'>
+  <div>
     <div v-for='(prop, name, index) in current' :key='index'>
-        <p>{{ name }} tem {{ prop }}</p>
-        <InputText type='text' v-model='current[name]' />
+      <p class='py-6'>{{ name }} tem {{ prop }}</p>
+      <InputText type='text' v-model='current[name]' />
     </div>
     <br>
     <Button label='Save' @click='personSave(current)' />
@@ -26,11 +26,11 @@ import { Person } from '@/models/Person'
 import baseService from '@/service/base.service'
 
 export default defineComponent({
-  name: 'HomeView',
+  name: 'personView',
   components: {},
   setup() {
     const current = ref<Person>(new Person())
-    const testeId = ref(1)
+    const testeId = ref(19)
     const result = ref( )
     const list = ref<Array<Person>>([])
     const controller = 'Person'
@@ -70,3 +70,7 @@ export default defineComponent({
   }
 })
 </script>
+
+<style scoped>
+
+</style>
