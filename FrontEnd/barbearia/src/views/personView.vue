@@ -9,14 +9,14 @@
     <Button label='EditPrice' @click='personEdit(current)' />
     <Button label='Delete' @click='personDelete(current)' />
     <hr>
-    <p>Lista de Produtos no banco</p>
+    <p>Lista de Produtos no banco {{ storage.prop.ola }}</p>
     <Button label='UpdateList' @click='getAll()' />
     <Listbox :options='list' optionLabel='name' @change="change($event)"/>
   </div>
 </template>
 
 <script lang='ts'>
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, inject, onMounted, ref } from 'vue'
 import { Person } from '@/models/Person'
 import baseService from '@/service/base.service'
 import router from '@/router'
@@ -25,6 +25,7 @@ export default defineComponent({
   name: 'personView',
   components: {},
   setup() {
+    const storage = inject('storage')
     const current = ref<Person>(new Person(undefined,'InsertName', 0,'','',''))
     const list = ref<Array<Person>>([])
     const controller = router.currentRoute.value.path.substring(1)
@@ -57,7 +58,16 @@ export default defineComponent({
     async function change(event) {
        await (await baseService(controller)).deleteModel(event.value)
     }
-    return { current, list, change, personDelete, personSave, personEdit, getAll }
+    return {
+      current,
+      storage,
+      list,
+      change,
+      personDelete,
+      personSave,
+      personEdit,
+      getAll
+    }
   }
 })
 </script>

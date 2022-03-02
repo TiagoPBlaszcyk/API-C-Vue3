@@ -1,72 +1,22 @@
 <template>
   <div class='home'>
-    <div v-for='(prop, name, index) in current' :key='index'>
-        <p>{{ name }} tem {{ prop }}</p>
-        <InputText type='text' v-model='current[name]' />
-    </div>
-    <br>
-    <Button label='Save' @click='personSave(current)' />
-    <Button label='EditPrice' @click='personEdit(current)' />
-    <Button label='Delete' @click='personDelete(current)' />
-    <hr>
-    <p>GetByID input id com System.Threading.Thread.Sleep(5000); no back end</p>
-    <Button label='GetById' @click='personGet(testeId)' />
-    <InputNumber mode='decimal' v-model.number='testeId'></InputNumber>
-    <p>Resul GetByID > {{result}}</p>
-    <hr>
-    <p>Lista de Produtos no banco</p>
-    <Button label='UpdateList' @click='getAll()' />
-    <Listbox :options="list" optionLabel="name"></Listbox>
+    <Button label='Person' @click='goToPerson' />
   </div>
 </template>
 
 <script lang='ts'>
-import { defineComponent, onMounted, ref } from 'vue'
-import { Person } from '@/models/Person'
-import baseService from '@/service/base.service'
+import { defineComponent } from 'vue'
+import router from '@/router'
 
 export default defineComponent({
   name: 'HomeView',
   components: {},
   setup() {
-    const current = ref<Person>(new Person(undefined,'InsertName', 0,'','',''))
-    const testeId = ref(1)
-    const result = ref( )
-    const list = ref<Array<Person>>([])
-    const controller = 'Person'
-
-    onMounted(async () => {
-      await getAll()
-    })
-
-    async function getAll() {
-      (await baseService(controller)).getAll().then((data) => {
-        list.value = data as Array<Person>
-      }).catch((response) => {
-        console.log('Erro personGetAll:', response)
-        Promise.reject(response)
-      })
+    function goToPerson() {
+      router.push({ name: 'Cadastro de Pessoas' })
     }
 
-    async function personGet(value) {
-      await (await baseService(controller)).getById(value).then((data) => {
-        result.value = data as Person
-      })
-    }
-
-    async function personSave(value: Person) {
-      await (await baseService(controller)).saveModel(value)
-    }
-
-    async function personEdit(value: Person) {
-      await (await baseService(controller)).editModel(value)
-    }
-
-    async function personDelete(value: Person) {
-      await (await baseService(controller)).deleteModel(value)
-    }
-
-    return { current, result, list, personDelete, personGet, personSave, personEdit, getAll, testeId }
+    return { goToPerson }
   }
 })
 </script>
