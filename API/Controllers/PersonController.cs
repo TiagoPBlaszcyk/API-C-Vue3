@@ -17,6 +17,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PersonVO>>> FindAll()
         {
+            System.Threading.Thread.Sleep(2000);
             var products = await _repository.FindAll();
             return Ok(products);
         }
@@ -25,7 +26,6 @@ namespace API.Controllers
         public async Task<ActionResult<PersonVO>> FindById(long id)
         {
             var product = await _repository.FindById(id);
-            System.Threading.Thread.Sleep(5000);
             if (product == null) return NotFound();
             return Ok(product);
         }
