@@ -1,15 +1,15 @@
 import services from './'
 
-export default async (service: string) => {
+export default (service: string) => {
   const baseUrl = 'api/v1/'
 
   const getById = async (id) => {
-    return await services().get(`${baseUrl + service}/${id}`)
+    return await services().get(`${baseUrl + service}/${id.id}`)
       .then((response) => {
         return response.data
       })
       .catch((error) => {
-        console.log('Get: id enviada ->',id)
+        console.log('Get: id enviada ->',id.id)
         console.log('Erro get catch (error)',error.response)
       })
   }

@@ -8,6 +8,7 @@ import storage from '@/store/storage.ts'
 export default {
   components: {},
   setup() {
+    localStorage.setItem('theme', 'primevue/resources/themes/vela-blue/theme.css')
     provide('storage', storage)
     return {}
   }

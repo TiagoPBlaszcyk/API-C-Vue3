@@ -11,21 +11,23 @@ import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import Listbox from 'primevue/listbox'
 import Button from 'primevue/button'
+import InputMask from 'primevue/inputmask'
 
-import 'primevue/resources/themes/vela-blue/theme.css'
-import 'primevue/resources/primevue.min.css'
-import 'primeflex/primeflex.css'
-import 'primeicons/primeicons.css'
+
+import '/node_modules/primevue/resources/themes/vela-blue/theme.css'
+import '/node_modules/primevue/resources/primevue.min.css'
+import '/node_modules/primeflex/primeflex.css'
+import '/node_modules/primeicons/primeicons.css'
 
 createApp(App)
   .use(router)
+  .use(VueAxios, axios)
   .use(PrimeVue, {ripple: true})
+  .directive('ripple', Ripple)
+  .directive('styleclass', StyleClass)
   .component('InputText', InputText)
+  .component('InputMask', InputMask)
   .component('InputNumber', InputNumber)
   .component('Listbox', Listbox)
   .component('Button', Button)
-  .directive('styleclass', StyleClass)
-  .directive('ripple', Ripple)
-  .use(VueAxios, axios)
-  .use(PrimeVue).
-mount('#app')
+  .mount('#app')
