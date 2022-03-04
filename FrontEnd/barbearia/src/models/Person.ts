@@ -1,21 +1,27 @@
 export class Person {
-  public id?: number | null
+  public id?: number | undefined
   public name: string
+  public email: string
+  public senha: string
+  public permissao: string
+  public cpf: string
   public whatsApp: number
-  public email: string | null
-  public cpf: string | null
 
   constructor(
-    id = null,
+    id = undefined,
     name,
+    email,
+    senha,
+    permissao,
+    cpf,
     whatsApp,
-    email = null,
-    cpf = null,
   ) {
     this.id = id
     this.name = name
-    this.whatsApp = whatsApp
     this.email = email
+    this.senha = senha
+    this.permissao = permissao
     this.cpf = cpf
+    this.whatsApp = whatsApp
   }
 }

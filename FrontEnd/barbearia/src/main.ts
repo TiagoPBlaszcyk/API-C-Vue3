@@ -12,6 +12,8 @@ import InputNumber from 'primevue/inputnumber'
 import Listbox from 'primevue/listbox'
 import Button from 'primevue/button'
 import InputMask from 'primevue/inputmask'
+import Password from 'primevue/password'
+import Divider from 'primevue/divider'
 
 
 import '/node_modules/primevue/resources/themes/vela-blue/theme.css'
@@ -30,4 +32,6 @@ createApp(App)
   .component('InputNumber', InputNumber)
   .component('Listbox', Listbox)
   .component('Button', Button)
+  .component('Password', Password)
+  .component('Divider', Divider)
   .mount('#app')

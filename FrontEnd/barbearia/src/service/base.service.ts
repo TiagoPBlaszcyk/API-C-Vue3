@@ -30,6 +30,7 @@ export default (service: string) => {
     return await services()
       .post(`${baseUrl + service}`, model)
       .then((response) => {
+        console.log(response)
         return response.data
       })
       .catch((error) => {

@@ -9,6 +9,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@vuelidate/core": "^2.0.0-alpha.34",
+    "@vuelidate/validators": "^2.0.0-alpha.26",
     "axios": "^0.26.0",
     "core-js": "^3.8.3",
     "primeflex": "^2.0.0",

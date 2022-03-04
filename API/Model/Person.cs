@@ -12,18 +12,28 @@ namespace API.Model
         [StringLength(150)]
         public string Name { get; set; }
 
-        [Column("whats-app")]
-        [Required]
-        [Range(1, 50)]
-        public decimal WhatsApp { get; set; }
-
         [Column("email")]
+        [Required]
         [StringLength(300)]
-        public string? Email { get; set; }
+        public string Email { get; set; }
+
+        [Column("senha")]
+        [Required]
+        [Range(1, 20)]
+        public string Senha { get; set; }       
+        
+        [Column("permissao")]
+        [Required]
+        [Range(1, 20)]
+        public string Permissao { get; set; }
 
         [Column("cpf")]
-        [StringLength(50)]
+        [StringLength(20)]
         public string? Cpf { get; set; }
+
+        [Column("whats-app")]
+        [Range(1, 20)]
+        public decimal? WhatsApp { get; set; }
 
         [Column("image_url")]
         [StringLength(300)]
