@@ -1,5 +1,9 @@
 <template>
   <div>
+    <ConfirmDialog :breakpoints="{'960px': '75vw', '640px': '100vw'}" :style="{width: '50vw'}" />
+    <Toast position="top-left" group="save" />
+    <Toast position="top-left" group="delete" />
+    <Toast position="top-left" group="edit" />
     <div class='p-d-flex p-jc-center'>
       <div class=''>
         <div class=''>
@@ -164,7 +168,7 @@
         label='Pesquisar'
         icon='pi pi-refresh'
         :loading='loading'
-        @click='getAll()'
+        @click='confirm2()'
       />
       <p class='p-text-center'>Click para editar ou excluir</p>
       <Listbox
@@ -189,8 +193,10 @@ import {
 import { Person } from '@/models/Person'
 import useVuelidate from '@vuelidate/core'
 import { required, email, helpers, sameAs } from '@vuelidate/validators'
-import baseService from '@/service/base.service'
 import router from '@/router'
+import baseService from '@/service/base.service'
+import { useToast } from 'primevue/usetoast'
+import { useConfirm } from 'primevue/useconfirm'
 
 export default defineComponent({
   name: 'personView',
@@ -200,6 +206,28 @@ export default defineComponent({
     const list = ref<Array<Person>>([])
     const controller = router.currentRoute.value.path.substring(1)
     const loading = ref()
+    const toast = useToast()
+    const confirmDialog = useConfirm()
+    const showSuccess = () => {
+      toast.add({severity:'success', summary: 'Sucesso!', detail:'Salvo em banco de dados', group: 'save', life: 3000})
+    }
+
+    const confirm2 = () => {
+      confirmDialog.require({
+        message: 'Gostaria de remover?',
+        header: 'Confirmação de exclusão',
+        icon: 'pi pi-info-circle',
+        acceptClass: 'p-button-danger',
+        accept: () => {
+          getAllPersons()
+          showSuccess()
+        },
+        reject: () => {
+          toast.add({severity:'error', summary:'Rejeitado', detail:'Recusado', group: 'save', life: 2000})
+        }
+      })
+    }
+
     const edit = ref(false)
     const state = reactive({
       id: undefined,
@@ -232,7 +260,7 @@ export default defineComponent({
     const v$ = useVuelidate(rules, state)
 
     onMounted(async () => {
-      await getAll()
+      await getAllPersons()
     })
 
     function resetValues(): void {
@@ -246,7 +274,7 @@ export default defineComponent({
       state.cpf = null
     }
 
-    async function getAll() {
+    async function getAllPersons() {
       loading.value = true
       baseService(controller)
         .getAll()
@@ -367,17 +395,20 @@ export default defineComponent({
       }
     }
 
+
+
     return {
       state,
       v$,
       loading,
       storage,
       list,
+      confirm2,
       change,
       personDelete,
       personSave,
       personEdit,
-      getAll,
+      getAllPersons,
       edit
     }
   }

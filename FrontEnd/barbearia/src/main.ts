@@ -5,6 +5,8 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 
 import PrimeVue from 'primevue/config'
+import ConfirmationService from 'primevue/confirmationservice'
+import ToastService from 'primevue/toastservice'
 import StyleClass from 'primevue/styleclass'
 import Ripple from 'primevue/ripple'
 import InputText from 'primevue/inputtext'
@@ -14,6 +16,8 @@ import Button from 'primevue/button'
 import InputMask from 'primevue/inputmask'
 import Password from 'primevue/password'
 import Divider from 'primevue/divider'
+import ConfirmDialog from 'primevue/confirmdialog'
+import Toast from 'primevue/toast'
 
 
 import '/node_modules/primevue/resources/themes/vela-blue/theme.css'
@@ -25,11 +29,15 @@ createApp(App)
   .use(router)
   .use(VueAxios, axios)
   .use(PrimeVue, {ripple: true})
+  .use(ConfirmationService)
+  .use(ToastService)
   .directive('ripple', Ripple)
   .directive('styleclass', StyleClass)
   .component('InputText', InputText)
   .component('InputMask', InputMask)
   .component('InputNumber', InputNumber)
+  .component('ConfirmDialog', ConfirmDialog)
+  .component('Toast', Toast)
   .component('Listbox', Listbox)
   .component('Button', Button)
   .component('Password', Password)

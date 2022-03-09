@@ -23,9 +23,8 @@ namespace API.Model
         public string Senha { get; set; }       
         
         [Column("permissao")]
-        [Required]
         [Range(1, 20)]
-        public string Permissao { get; set; }
+        public string? Permissao { get; set; }
 
         [Column("cpf")]
         [StringLength(20)]
