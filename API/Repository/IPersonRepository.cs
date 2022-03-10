@@ -6,6 +6,7 @@ namespace API.Repository
     {
         Task<IEnumerable<PersonVO>> FindAll();
         Task<PersonVO> FindById(long id);
+        Task<PersonVO> FindByName(string name);
         Task<PersonVO> Create(PersonVO vo);
         Task<PersonVO> Update(PersonVO vo);
         Task<bool> Delete(long id);

@@ -31,6 +31,15 @@ namespace API.Repository
             return _mapper.Map<PersonVO>(product);
         }
 
+        public async Task<PersonVO> FindByName(string name)
+        {
+
+            Person product = await _context.Persons.Where(p => p.Name == name).FirstOrDefaultAsync();
+            if (product == null) throw new ArgumentNullException(nameof(product));
+            
+            return _mapper.Map<PersonVO>(product);
+        }
+
         public async Task<PersonVO> Create(PersonVO vo)
         {
             Person product = _mapper.Map<Person>(vo);

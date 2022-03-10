@@ -1,8 +1,12 @@
+using System.Text;
+using API;
 using API.Model.Context;
 using Microsoft.EntityFrameworkCore;
 using API.Config;
 using API.Repository;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +29,28 @@ builder.Services.AddDbContextPool<MySQLContext>(options =>
  
 builder.Services.AddControllersWithViews();
 
+var key = Encoding.ASCII.GetBytes(Settings.Secret);
+
+
+builder.Services.AddAuthentication(auth =>
+{
+    auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(jwt =>
+{
+    jwt.RequireHttpsMetadata = false;
+    jwt.SaveToken = true;
+    jwt.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+
+
+
 var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
@@ -40,8 +66,6 @@ builder.Services.AddCors(options =>
 });
 
 
-
- 
 var app = builder.Build();
 
 var scope = app.Services.CreateScope();
@@ -60,6 +84,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseCors(MyAllowSpecificOrigins);
+
+app.UseAuthentication();
  
 app.UseAuthorization();
 

@@ -18,17 +18,25 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PersonVO>>> FindAll()
         {
-            System.Threading.Thread.Sleep(2000);
-            var products = await _repository.FindAll();
-            return Ok(products);
+            var persons = await _repository.FindAll();
+            return Ok(persons);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<PersonVO>> FindById(long id)
         {
-            var product = await _repository.FindById(id);
-            if (product == null) return NotFound();
-            return Ok(product);
+            var person = await _repository.FindById(id);
+            if (person == null) return NotFound();
+            return Ok(person);
+        }
+
+        [HttpGet]
+        [Route("/getbyname")]
+        public async Task<ActionResult<PersonVO>> FindByName(string name)
+        {
+            var person = await _repository.FindByName(name);
+            if (person == null) return NotFound();
+            return Ok(person);
         }
 
         [HttpPost]
@@ -48,16 +56,16 @@ namespace API.Controllers
 
             if (vo == null) return BadRequest();
 
-            var product = await _repository.Create(vo);
-            return Ok(product);
+            var person = await _repository.Create(vo);
+            return Ok(person);
         }
 
         [HttpPut]
         public async Task<ActionResult<PersonVO>> Update(PersonVO vo)
         {
             if (vo == null) return BadRequest();
-            var product = await _repository.Update(vo);
-            return Ok(product);
+            var person = await _repository.Update(vo);
+            return Ok(person);
         }
 
         [HttpDelete("{id}")]

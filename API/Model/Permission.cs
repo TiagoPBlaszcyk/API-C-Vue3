@@ -7,9 +7,9 @@ namespace API.Model
     [Table("permission")]
     public class Permission : BaseEntity
     {
-        [Column("permission")]
+        [Column("descricao")]
         [StringLength(150)]
-        public string permission { get; }
+        public string Descricao { get; set; }
 
     }
 }

@@ -10,6 +10,7 @@ namespace API.Model.Context
         }
 
         public DbSet<Person> Persons { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
 
     }
 }
