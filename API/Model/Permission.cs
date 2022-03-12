@@ -4,7 +4,7 @@ using API.Model.Base;
 
 namespace API.Model
 {
-    [Table("permission")]
+    [Table("Permission")]
     public class Permission : BaseEntity
     {
         [Column("descricao")]

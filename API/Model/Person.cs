@@ -4,7 +4,7 @@ using API.Model.Base;
 
 namespace API.Model
 {
-    [Table("person")]
+    [Table("Persons")]
     public class Person : BaseEntity
     {
         [Column("name")]
