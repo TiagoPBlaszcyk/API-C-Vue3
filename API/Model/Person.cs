@@ -22,9 +22,9 @@ namespace API.Model
         [Range(1, 20)]
         public string Senha { get; set; }       
         
-        [Column("permissao")]
-        [Range(1, 20)]
-        public string? Permissao { get; set; }
+        public long? PermissaoId {get; set; }
+        [ForeignKey("PermissaoId")]
+        public Permission id { get; set; }
 
         [Column("cpf")]
         [StringLength(20)]
