@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(MySQLContext))]
-    [Migration("20220314193308_Start")]
+    [Migration("20220314211222_Start")]
     partial class Start
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -97,30 +97,6 @@ namespace API.Migrations
                     b.HasIndex("PermissaoId");
 
                     b.ToTable("Persons");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Cpf = "11122233344",
-                            Email = "admin@admin.com.br",
-                            ImageUrl = "http://google.com.br",
-                            Name = "admin",
-                            PermissaoId = 1L,
-                            Senha = "admin",
-                            WhatsApp = 11233445566m
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Cpf = "22233344455",
-                            Email = "convidado@convidado.com.br",
-                            ImageUrl = "http://bing.com.br",
-                            Name = "convidado",
-                            PermissaoId = 2L,
-                            Senha = "convidado",
-                            WhatsApp = 22233445566m
-                        });
                 });
 
             modelBuilder.Entity("API.Model.Person", b =>

@@ -2,6 +2,7 @@
 using API.Model;
 using API.Model.Context;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Repository
@@ -18,26 +19,26 @@ namespace API.Repository
         }
         public async Task<IEnumerable<PersonVO>> FindAll()
         {
-            List<Person> products = await _context.Persons.ToListAsync();
-            return _mapper.Map<List<PersonVO>>(products);
+            List<Person> persons = await _context.Persons.ToListAsync();
+            return _mapper.Map<List<PersonVO>>(persons);
         }
 
         public async Task<PersonVO> FindById(long id)
         {
 
-            Person product = await _context.Persons.Where(p => p.Id == id).FirstOrDefaultAsync();
-            if (product == null) throw new ArgumentNullException(nameof(product));
+            Person person = await _context.Persons.Where(p => p.Id == id).FirstOrDefaultAsync();
+            if (person == null) throw new InvalidOperationException($"Não encontrado!");
             
-            return _mapper.Map<PersonVO>(product);
+            return _mapper.Map<PersonVO>(person);
         }
 
-        public async Task<PersonVO> FindByName(string name)
+        public async Task<Person> FindByName(string name)
         {
 
-            Person product = await _context.Persons.Where(p => p.Name == name).FirstOrDefaultAsync();
-            if (product == null) throw new ArgumentNullException(nameof(product));
+            Person person = await _context.Persons.Where(p => p.Name == name).FirstOrDefaultAsync();
+            if (person == null) throw new ArgumentNullException(nameof(person));
             
-            return _mapper.Map<PersonVO>(product);
+            return _mapper.Map<Person>(person);
         }
 
         public async Task<PersonVO> Create(PersonVO vo)

@@ -11,7 +11,7 @@ namespace API;
 
 public static class TokenService
 {
-    public static string GenerateToken(PersonVO user)
+    public static string GenerateToken(Person user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(Settings.Secret);
@@ -20,7 +20,7 @@ public static class TokenService
             Subject = new ClaimsIdentity( new []
             {
                 new Claim(ClaimTypes.Name, user.Name),
-                new Claim(ClaimTypes.Role, user.Permissao.ToString())
+                new Claim(ClaimTypes.Role, user.PermissaoId.ToString())
             }),
             Expires = DateTime.UtcNow.AddHours(8),
             SigningCredentials = new SigningCredentials(

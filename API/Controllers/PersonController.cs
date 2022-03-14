@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using API.Data.ValueObjects;
 using API.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -16,6 +17,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<PersonVO>>> FindAll()
         {
             var persons = await _repository.FindAll();
@@ -23,6 +25,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<PersonVO>> FindById(long id)
         {
             var person = await _repository.FindById(id);
@@ -30,16 +33,8 @@ namespace API.Controllers
             return Ok(person);
         }
 
-        [HttpGet]
-        [Route("/getbyname")]
-        public async Task<ActionResult<PersonVO>> FindByName(string name)
-        {
-            var person = await _repository.FindByName(name);
-            if (person == null) return NotFound();
-            return Ok(person);
-        }
-
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<PersonVO>> Create(PersonVO vo)
         {
             ///^
@@ -61,6 +56,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
+        [AllowAnonymous]
         public async Task<ActionResult<PersonVO>> Update(PersonVO vo)
         {
             if (vo == null) return BadRequest();
@@ -69,6 +65,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult> Delete(long id)
         {
             if (id == null) return BadRequest();

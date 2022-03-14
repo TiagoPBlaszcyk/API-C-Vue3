@@ -95,30 +95,6 @@ namespace API.Migrations
                     b.HasIndex("PermissaoId");
 
                     b.ToTable("Persons");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Cpf = "11122233344",
-                            Email = "admin@admin.com.br",
-                            ImageUrl = "http://google.com.br",
-                            Name = "admin",
-                            PermissaoId = 1L,
-                            Senha = "admin",
-                            WhatsApp = 11233445566m
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Cpf = "22233344455",
-                            Email = "convidado@convidado.com.br",
-                            ImageUrl = "http://bing.com.br",
-                            Name = "convidado",
-                            PermissaoId = 2L,
-                            Senha = "convidado",
-                            WhatsApp = 22233445566m
-                        });
                 });
 
             modelBuilder.Entity("API.Model.Person", b =>

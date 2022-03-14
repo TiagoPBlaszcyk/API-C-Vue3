@@ -67,16 +67,6 @@ namespace API.Migrations
                 columns: new[] { "id", "descricao" },
                 values: new object[] { 2L, "Convidado" });
 
-            migrationBuilder.InsertData(
-                table: "Persons",
-                columns: new[] { "id", "cpf", "email", "image_url", "name", "PermissaoId", "senha", "whats-app" },
-                values: new object[] { 1L, "11122233344", "admin@admin.com.br", "http://google.com.br", "admin", 1L, "admin", 11233445566m });
-
-            migrationBuilder.InsertData(
-                table: "Persons",
-                columns: new[] { "id", "cpf", "email", "image_url", "name", "PermissaoId", "senha", "whats-app" },
-                values: new object[] { 2L, "22233344455", "convidado@convidado.com.br", "http://bing.com.br", "convidado", 2L, "convidado", 22233445566m });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Persons_PermissaoId",
                 table: "Persons",
