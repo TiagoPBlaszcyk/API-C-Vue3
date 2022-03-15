@@ -199,7 +199,7 @@ import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 
 export default defineComponent({
-  name: 'personView',
+  name: 'PersonView',
   components: {},
   setup() {
     const storage = inject('storage')

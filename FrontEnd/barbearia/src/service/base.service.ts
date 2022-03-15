@@ -39,6 +39,19 @@ export default (service: string) => {
       })
   }
 
+  const login = async (model) => {
+    return await services()
+      .post(`${baseUrl + service}`, model)
+      .then((response) => {
+        console.log(response)
+        return response.data
+      })
+      .catch(() => {
+        console.log('Post: Model enviada ->',model)
+        alert('Tente Novamente! Login e Senha admin')
+      })
+  }
+
   const editModel = async (model) => {
     return await services()
       .put(`${baseUrl + service}`, model)
@@ -68,6 +81,7 @@ export default (service: string) => {
     getById,
     saveModel,
     editModel,
-    deleteModel
+    deleteModel,
+    login
   }
 }

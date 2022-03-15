@@ -1,7 +1,7 @@
 export * from './base.service'
 import axios from 'axios'
 
-export default ({ requiresAuth = true } = {}) => {
+export default () => {
   const options = {
     baseURL: '',
     headers: {
@@ -12,17 +12,7 @@ export default ({ requiresAuth = true } = {}) => {
     timeout: 60 * 1000
   }
   options.baseURL = 'https://localhost:5020/'
+  options.headers.Authorization = `Bearer ${localStorage.getItem('Authorization')}`
 
-
-  if (requiresAuth) {
-    const jwtToken = localStorage.getItem('mp_auth')
-    options.headers.Authorization = 'Bearer ' + jwtToken as string
-  }
-  // else {
-    // options.baseURL = 'https://localhost:5020/'
-    // const jwtToken = localStorage.getItem('mp_auth')
-    // options.headers.Authorization = 'Bearer ' + jwtToken as string
-  // }
-  const instance = axios.create(options)
-  return instance
+  return axios.create(options)
 }
