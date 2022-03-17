@@ -43,12 +43,24 @@ export default (service: string) => {
     return await services()
       .post(`${baseUrl + service}`, model)
       .then((response) => {
+        return response.data
+      })
+      .catch((erro) => {
+        console.log('Post: Model enviada ->',model)
+        alert('Tente Novamente!')
+      })
+  }
+
+  const newPerson = async (model) => {
+    return await services()
+      .post(`${baseUrl + service}/Cadastro`, model)
+      .then((response) => {
         console.log(response)
         return response.data
       })
       .catch(() => {
         console.log('Post: Model enviada ->',model)
-        alert('Tente Novamente! Login e Senha admin')
+        alert('Tente Novamente!')
       })
   }
 
@@ -82,6 +94,7 @@ export default (service: string) => {
     saveModel,
     editModel,
     deleteModel,
+    newPerson,
     login
   }
 }

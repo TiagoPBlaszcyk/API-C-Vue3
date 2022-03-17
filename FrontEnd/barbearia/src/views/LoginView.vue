@@ -1,7 +1,10 @@
 <template>
   <div class='p-d-flex p-jc-center p-align-center p-flex-column'>
+    <Toast position="top-left" group="save" />
+    <Toast position="top-left" group="erro" />
+    <Toast position="top-left" group="login" />
     <div>
-      <h1 class='p-text-center p-mb-6'>Login</h1>
+      <h1 class='p-text-center p-mb-6'>{{ register ? 'Cadastro' : 'Login' }}</h1>
       <div class=''>
         <div class='p-inputgroup p-mt-4'>
           <span class='p-inputgroup-addon'><i class='pi pi-user'></i></span>
@@ -61,21 +64,28 @@
         </div>
       </div>
     </div>
-    <div>
-      <Button
-        icon='pi pi-sign-in'
-        iconPos='right'
-        class='p-m-2'
-        label='Entrar'
-        @click='login()'
-      />
-    </div>
+    <Button
+      :icon='register? `pi pi-sign-in` : `pi pi-database`'
+      iconPos='right'
+      class='p-mt-3 p-mr-2'
+      @click='register = !register'
+      :label='register ? `Já possue conta?` : `Criar nova conta`'
+    />
+    <Button
+      :icon='register? `pi pi-database` : `pi pi-sign-in`'
+      iconPos='right'
+      class='p-mt-3'
+      :label='register? `Salvar` : `Entrar`'
+      @click='register? newRegister() : login()'
+    />
   </div>
 </template>
 
 <script lang='ts'>
-import { computed, defineComponent, inject, reactive } from 'vue'
+import { computed, defineComponent, inject, reactive, ref } from 'vue'
 import { helpers, required, sameAs } from '@vuelidate/validators'
+import { useToast } from 'primevue/usetoast'
+import { useConfirm } from 'primevue/useconfirm'
 import useVuelidate from '@vuelidate/core'
 import baseService from '@/service/base.service'
 import router from '@/router'
@@ -85,18 +95,24 @@ export default defineComponent({
   components: {},
   setup() {
     const storage = inject('storage')
+    const toast = useToast()
+    const confirmDialog = useConfirm()
+    const register = ref(false)
     const controller = 'Login'
     const state = reactive({
       name: null,
       senha: null,
       confirmarSenha: null
     })
+
+    const password = helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/)
     const rules = computed(() => ({
       name: {
-        required: helpers.withMessage('Digite admin', required)
+        required: helpers.withMessage('Preenchimento obrigatório', required)
       },
       senha: {
-        required: helpers.withMessage('Digite admin', required)
+        required: helpers.withMessage('Preenchimento obrigatório', required),
+        password: helpers.withMessage('Senha precisa ser Forte', password)
       },
       confirmarSenha: {
         required: helpers.withMessage('Preenchimento obrigatório', required),
@@ -104,6 +120,27 @@ export default defineComponent({
       }
     }))
     const v$ = useVuelidate(rules, state)
+
+    const newRegister = async () => {
+      if(!v$.value.$invalid){
+        await baseService(controller)
+          .newPerson(
+            {
+              Name: state.name,
+              Senha: state.senha
+            }
+          )
+          .then((result) => {
+            console.log(result)
+            register.value = false
+            router.push('/')
+            toast.add({severity:'success', summary: 'Sucesso!', detail:'Salvo em banco de dados', group: 'save', life: 3000})
+          })
+      }else{
+
+        toast.add({severity:'error', summary:'Erro', detail:'Revise o formulario', group: 'erro', life: 2000})
+      }
+    }
 
     const login = async () => {
       await baseService(controller)
@@ -114,7 +151,7 @@ export default defineComponent({
           }
         )
         .then((result) => {
-          if(result.token){
+          if (result.token) {
             localStorage.setItem('Authorization', result.token)
             router.push('/Home')
           } else {
@@ -128,7 +165,11 @@ export default defineComponent({
       storage,
       v$,
       state,
-      login
+      login,
+      toast,
+      confirmDialog,
+      newRegister,
+      register
     }
   }
 })

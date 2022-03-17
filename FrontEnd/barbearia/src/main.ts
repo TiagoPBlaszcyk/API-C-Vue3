@@ -13,6 +13,7 @@ import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import Listbox from 'primevue/listbox'
 import Button from 'primevue/button'
+import Checkbox from 'primevue/checkbox'
 import InputMask from 'primevue/inputmask'
 import Password from 'primevue/password'
 import Divider from 'primevue/divider'
@@ -38,6 +39,7 @@ createApp(App)
   .component('InputNumber', InputNumber)
   .component('ConfirmDialog', ConfirmDialog)
   .component('Toast', Toast)
+  .component('Checkbox', Checkbox)
   .component('Listbox', Listbox)
   .component('Button', Button)
   .component('Password', Password)

@@ -12,17 +12,16 @@ namespace API.Model
         [StringLength(150)]
         public string Name { get; set; }
 
-        [Column("email")]
-        [Required]
-        [StringLength(300)]
-        public string Email { get; set; }
-
         [Column("senha")]
         [Required]
         [Range(1, 20)]
         public string Senha { get; set; }       
+
+        [Column("email")]
+        [StringLength(300)]
+        public string? Email { get; set; }
         
-        public long PermissaoId {get; set; }
+        public int? PermissaoId {get; set; }
         [ForeignKey("PermissaoId")]
         public virtual Permission id { get; set; }
 

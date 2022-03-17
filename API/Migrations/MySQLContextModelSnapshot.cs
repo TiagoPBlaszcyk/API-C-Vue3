@@ -21,9 +21,9 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Model.Permission", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("int")
                         .HasColumnName("id");
 
                     b.Property<string>("Descricao")
@@ -39,21 +39,26 @@ namespace API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1L,
+                            Id = 1,
                             Descricao = "Administrador"
                         },
                         new
                         {
-                            Id = 2L,
+                            Id = 2,
+                            Descricao = "Usuário"
+                        },
+                        new
+                        {
+                            Id = 3,
                             Descricao = "Convidado"
                         });
                 });
 
             modelBuilder.Entity("API.Model.Person", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("int")
                         .HasColumnName("id");
 
                     b.Property<string>("Cpf")
@@ -62,7 +67,6 @@ namespace API.Migrations
                         .HasColumnName("cpf");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("varchar(300)")
                         .HasColumnName("email");
@@ -78,8 +82,8 @@ namespace API.Migrations
                         .HasColumnType("varchar(150)")
                         .HasColumnName("name");
 
-                    b.Property<long?>("PermissaoId")
-                        .HasColumnType("bigint");
+                    b.Property<int?>("PermissaoId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Senha")
                         .IsRequired()
@@ -95,6 +99,19 @@ namespace API.Migrations
                     b.HasIndex("PermissaoId");
 
                     b.ToTable("Persons");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Cpf = "11122233344",
+                            Email = "admin@admin.com.br",
+                            ImageUrl = "http://google.com.br",
+                            Name = "admin",
+                            PermissaoId = 1,
+                            Senha = "admin",
+                            WhatsApp = 11233445566m
+                        });
                 });
 
             modelBuilder.Entity("API.Model.Person", b =>

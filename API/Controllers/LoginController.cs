@@ -18,18 +18,29 @@ namespace API.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult<dynamic>> AuthenticateAsync([FromBody] LoginVO model)
+        public async Task<ActionResult> AuthenticateAsync([FromBody] LoginVO model)
         {
             Person person = await _repository.FindByName(model.Name);
-            if (person == null || model.Senha != person.Senha) return NotFound("Login ou senha incorretos (Login:admin, Senha:admin)!");
+            if (person == null || model.Senha != person.Senha) return BadRequest();
 
             var token = TokenService.GenerateToken(person);
 
-            return new
+            return Ok(new
             {
                 user = model,
                 token = token
-            };
+            });
+        }
+
+        [HttpPost]
+        [Route("Cadastro")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> RegisterAsync([FromBody] PersonVO model)
+        {
+            if (model == null) return BadRequest();
+            PersonVO person = await _repository.Create(model);
+
+            return Ok(person);
         }
     }
 }
