@@ -43,20 +43,20 @@ namespace API.Repository
 
         public async Task<PersonVO> Create(PersonVO vo)
         {
-            Person product = _mapper.Map<Person>(vo);
-            _context.Persons.Add(product);
+            Person person = _mapper.Map<Person>(vo);
+            _context.Persons.Add(person);
             await _context.SaveChangesAsync();
-            return _mapper.Map<PersonVO>(product);
+            return _mapper.Map<PersonVO>(person);
         }
 
         public async Task<PersonVO> Update(PersonVO vo)
         {
             try
             {
-                Person product = _mapper.Map<Person>(vo);
-                _context.Persons.Update(product);
+                Person person = _mapper.Map<Person>(vo);
+                _context.Persons.Update(person);
                 await _context.SaveChangesAsync();
-                return _mapper.Map<PersonVO>(product);
+                return _mapper.Map<PersonVO>(person);
             }
             catch (Exception e)
             {
@@ -69,9 +69,9 @@ namespace API.Repository
         {
             try
             {
-                Person product = await _context.Persons.Where(p => p.Id == id).FirstOrDefaultAsync();
-                if (product == null) return false;
-                _context.Persons.Remove(product);
+                Person person = await _context.Persons.Where(p => p.Id == id).FirstOrDefaultAsync();
+                if (person == null) return false;
+                _context.Persons.Remove(person);
                 await _context.SaveChangesAsync();
                 return true;
             }
