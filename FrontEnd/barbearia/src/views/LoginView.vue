@@ -82,7 +82,7 @@
 </template>
 
 <script lang='ts'>
-import { computed, defineComponent, inject, reactive, ref } from 'vue'
+import { computed, defineComponent, reactive, ref } from 'vue'
 import { helpers, required, sameAs } from '@vuelidate/validators'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
@@ -94,7 +94,6 @@ export default defineComponent({
   name: 'LoginView',
   components: {},
   setup() {
-    const storage = inject('storage')
     const toast = useToast()
     const confirmDialog = useConfirm()
     const register = ref(false)
@@ -137,32 +136,34 @@ export default defineComponent({
             toast.add({severity:'success', summary: 'Sucesso!', detail:'Salvo em banco de dados', group: 'save', life: 3000})
           })
       }else{
-
         toast.add({severity:'error', summary:'Erro', detail:'Revise o formulario', group: 'erro', life: 2000})
       }
     }
 
     const login = async () => {
-      await baseService(controller)
-        .login(
-          {
-            Name: state.name,
-            Senha: state.senha
-          }
-        )
-        .then((result) => {
-          if (result.token) {
-            localStorage.setItem('Authorization', result.token)
-            router.push('/Home')
-          } else {
-            localStorage.clear()
-            router.push('/')
-          }
-        })
+      if(!v$.value.$invalid) {
+        await baseService(controller)
+          .login(
+            {
+              Name: state.name,
+              Senha: state.senha
+            }
+          )
+          .then((result) => {
+            if (result.token) {
+              localStorage.setItem('Authorization', result.token)
+              router.push('/Home')
+            } else {
+              localStorage.clear()
+              router.push('/')
+            }
+          })
+      }else {
+        toast.add({severity:'error', summary:'Erro', detail:'Revise o formulario', group: 'erro', life: 2000})
+      }
     }
 
     return {
-      storage,
       v$,
       state,
       login,

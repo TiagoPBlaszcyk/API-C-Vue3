@@ -1,13 +1,14 @@
 import { reactive, readonly } from 'vue'
 // Full realtive
 const prop = reactive({
-  ola: 'Hello World!',
+  visibleRight: false,
+  visibleLeft: false,
 })
 
 
 // Get and Set readonly
 const state = reactive({
-  teste: '11122233399'
+  teste: 'Abc123'
 })
 const setters = {
   setTeste(val: string): void {

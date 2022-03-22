@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import Person  from '../views/PersonView.vue'
+import Events  from '../views/EventsView.vue'
 import Login  from '../views/LoginView.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -15,9 +15,9 @@ const routes: Array<RouteRecordRaw> = [
     component: Login
   },
   {
-    path: '/Person',
-    name: 'Cadastro de Pessoas',
-    component: Person
+    path: '/Eventos',
+    name: 'Eventos',
+    component: Events
   }
   // {
   //   path: "/about",
@@ -36,3 +36,20 @@ const router = createRouter({
 })
 
 export default router
+
+router.beforeEach((to, from, next) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  if (to.path == '/Logout') {
+    localStorage.clear()
+  }
+  const publicPages = ['/']
+  const authRequired = !publicPages.includes(to.path)
+  const loggedIn = localStorage.getItem('Authorization')
+
+  if (authRequired && !loggedIn) {
+    console.log('Rota 1.0 Sem token')
+    return next('/')
+  }
+  console.log('Rota 1.1 token:', localStorage.getItem('Authorization'))
+  next()
+})

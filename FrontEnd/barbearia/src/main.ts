@@ -12,9 +12,13 @@ import Ripple from 'primevue/ripple'
 import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import Listbox from 'primevue/listbox'
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
 import Button from 'primevue/button'
+import Sidebar from 'primevue/sidebar'
 import Checkbox from 'primevue/checkbox'
 import InputMask from 'primevue/inputmask'
+import InputSwitch from 'primevue/inputswitch'
 import Password from 'primevue/password'
 import Divider from 'primevue/divider'
 import ConfirmDialog from 'primevue/confirmdialog'
@@ -29,7 +33,15 @@ import '/node_modules/primeicons/primeicons.css'
 createApp(App)
   .use(router)
   .use(VueAxios, axios)
-  .use(PrimeVue, {ripple: true})
+  .use(PrimeVue, {
+    ripple: true,
+    zIndex: {
+      modal: 1100,        //dialog, sidebar
+      overlay: 1000,      //dropdown, overlaypanel
+      menu: 1000,         //overlay menus
+      tooltip: 1100       //tooltip
+    }
+  })
   .use(ConfirmationService)
   .use(ToastService)
   .directive('ripple', Ripple)
@@ -37,7 +49,11 @@ createApp(App)
   .component('InputText', InputText)
   .component('InputMask', InputMask)
   .component('InputNumber', InputNumber)
+  .component('InputSwitch', InputSwitch)
+  .component('Sidebar', Sidebar)
   .component('ConfirmDialog', ConfirmDialog)
+  .component('DataTable', DataTable)
+  .component('Column', Column)
   .component('Toast', Toast)
   .component('Checkbox', Checkbox)
   .component('Listbox', Listbox)

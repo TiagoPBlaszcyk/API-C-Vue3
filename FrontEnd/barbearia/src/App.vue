@@ -10,6 +10,7 @@ export default {
   setup() {
     localStorage.setItem('theme', 'primevue/resources/themes/vela-blue/theme.css')
     provide('storage', storage)
+
     return {}
   }
 }
