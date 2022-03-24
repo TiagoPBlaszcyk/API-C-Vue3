@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(MySQLContext))]
-    [Migration("20220316233513_Start")]
+    [Migration("20220324213835_Start")]
     partial class Start
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,43 @@ namespace API.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("API.Model.Events", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Category")
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("category");
+
+                    b.Property<string>("Date")
+                        .HasColumnType("longtext")
+                        .HasColumnName("date");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("name");
+
+                    b.Property<int?>("PersonId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<string>("State")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("state");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonId");
+
+                    b.ToTable("Events");
+                });
 
             modelBuilder.Entity("API.Model.Permission", b =>
                 {
@@ -114,6 +151,17 @@ namespace API.Migrations
                             Senha = "admin",
                             WhatsApp = 11233445566m
                         });
+                });
+
+            modelBuilder.Entity("API.Model.Events", b =>
+                {
+                    b.HasOne("API.Model.Person", "id")
+                        .WithMany()
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("id");
                 });
 
             modelBuilder.Entity("API.Model.Person", b =>

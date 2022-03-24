@@ -45,6 +45,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+builder.Services.AddScoped<IEventsRepository, EventsRepository>();
 
 // Add services to the container.
 string mySqlConnection =

@@ -16,6 +16,11 @@ namespace API.Controllers
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
+
+        /// <summary>
+        /// Retorna todos cadastros de Pessoas
+        /// </summary>
+        /// <returns>List<Person></returns>
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<PersonVO>>> FindAll()
@@ -24,6 +29,11 @@ namespace API.Controllers
             return Ok(persons);
         }
 
+        /// <summary>
+        /// Retorna uma Pessoa pelo seu código identificador
+        /// </summary>
+        /// <param name="id">Código identificador de Pessoa</param>
+        /// <returns>Person</returns>
         [HttpGet("{id}")]
         [Authorize(Roles = "1")]
         public async Task<ActionResult<PersonVO>> FindById(long id)
@@ -53,7 +63,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AllowAnonymous]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult> Delete(long id)
         {
             if (id == null) return BadRequest();

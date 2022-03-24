@@ -10,6 +10,7 @@ namespace API.Model.Context
         }
         public DbSet<Person> Persons { get; set; }
         public DbSet<Permission> Permissions { get; set; }
+        public DbSet<Events> Events { get; set; }
 
 
         // Adiciona uma base minima para login como permissoes de Administrador e Convidado
@@ -41,17 +42,6 @@ namespace API.Model.Context
                 WhatsApp = 11233445566,
                 ImageUrl = "http://google.com.br"
             });
-            //modelBuilder.Entity<Person>().HasData(new Person
-            //{
-            //    Id = 2,
-            //    Name = "convidado",
-            //    Email = "convidado@convidado.com.br",
-            //    Senha = "convidado",
-            //    Cpf = "22233344455",
-            //    PermissaoId = 2,
-            //    WhatsApp = 22233445566,
-            //    ImageUrl = "http://bing.com.br"
-            //});
         }
     }
 }

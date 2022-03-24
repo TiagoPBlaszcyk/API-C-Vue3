@@ -12,6 +12,7 @@ namespace API.Config
             {
                 config.CreateMap<Person, PersonVO>().ReverseMap();
                 config.CreateMap<Person, LoginVO>().ReverseMap();
+                config.CreateMap<Events, EventsVO>().ReverseMap();
             });
 
             return mappingConfig;

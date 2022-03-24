@@ -19,7 +19,7 @@ public static class TokenService
         {
             Subject = new ClaimsIdentity( new []
             {
-                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Name, user.Id.ToString()),
                 new Claim(ClaimTypes.Role, user.PermissaoId.ToString())
             }),
             Expires = DateTime.UtcNow.AddHours(8),
