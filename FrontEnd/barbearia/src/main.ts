@@ -12,7 +12,9 @@ import Ripple from 'primevue/ripple'
 import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import Listbox from 'primevue/listbox'
+import Dropdown from 'primevue/dropdown'
 import DataTable from 'primevue/datatable'
+import Calendar from 'primevue/calendar'
 import Column from 'primevue/column'
 import Button from 'primevue/button'
 import Sidebar from 'primevue/sidebar'
@@ -39,17 +41,19 @@ createApp(App)
       modal: 1100,        //dialog, sidebar
       overlay: 1000,      //dropdown, overlaypanel
       menu: 1000,         //overlay menus
-      tooltip: 1100       //tooltip
+      tooltip: 1200       //tooltip
     }
   })
   .use(ConfirmationService)
   .use(ToastService)
   .directive('ripple', Ripple)
   .directive('styleclass', StyleClass)
+  .component('Calendar', Calendar)
   .component('InputText', InputText)
   .component('InputMask', InputMask)
   .component('InputNumber', InputNumber)
   .component('InputSwitch', InputSwitch)
+  .component('Dropdown', Dropdown)
   .component('Sidebar', Sidebar)
   .component('ConfirmDialog', ConfirmDialog)
   .component('DataTable', DataTable)

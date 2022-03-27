@@ -3,26 +3,26 @@ import services from './'
 export default (service: string) => {
   const baseUrl = 'api/v1/'
 
-  const getById = async (id) => {
-    return await services().get(`${baseUrl + service}/${id.id}`)
+  const getById = async (model) => {
+    return await services().get(`${baseUrl + service}/${model.id}`)
       .then((response) => {
         return response.data
       })
       .catch((error) => {
-        console.log('Get: id enviada ->',id.id)
-        console.log('Erro get catch (error)',error.response)
+        console.log('Get: id enviada ->', model.id)
+        console.log('Erro get catch (error)', error.response)
       })
   }
 
   const getAll = async () => {
-    return await  services()
+    return await services()
       .get(`${baseUrl + service}`)
       .then((response) => {
         return response.data
       })
       .catch((error) => {
         console.log('Get: ALL')
-        console.log('Erro getALL catch (error)',error.response)
+        console.log('Erro getALL catch (error)', error.response)
       })
   }
 
@@ -30,12 +30,12 @@ export default (service: string) => {
     return await services()
       .post(`${baseUrl + service}`, model)
       .then((response) => {
-        console.log(response)
-        return response.data
-      })
+          console.log(response)
+          return response.data
+        })
       .catch((error) => {
-        console.log('Post: Model enviada ->',model)
-        console.log('Erro Save catch (error)',error.response)
+        console.log('Post: Model enviada ->', model)
+        console.log('Erro Save catch (error)', error.response)
       })
   }
 
@@ -46,7 +46,7 @@ export default (service: string) => {
         return response.data
       })
       .catch((erro) => {
-        console.log('Post: Model enviada ->',model)
+        console.log('Post: Model enviada ->', model)
         alert('Tente Novamente!')
       })
   }
@@ -59,7 +59,7 @@ export default (service: string) => {
         return response.data
       })
       .catch(() => {
-        console.log('Post: Model enviada ->',model)
+        console.log('Post: Model enviada ->', model)
         alert('Tente Novamente!')
       })
   }
