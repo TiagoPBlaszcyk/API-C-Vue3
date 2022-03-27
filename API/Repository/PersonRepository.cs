@@ -43,6 +43,8 @@ namespace API.Repository
 
         public async Task<PersonVO> Create(PersonVO vo)
         {
+            if (vo.PermissaoId == null)
+                vo.PermissaoId = 2;
             Person person = _mapper.Map<Person>(vo);
             _context.Persons.Add(person);
             await _context.SaveChangesAsync();

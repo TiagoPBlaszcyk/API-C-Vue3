@@ -18,9 +18,10 @@ namespace API.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<EventsVO>>> FindAll()
+        public async Task<ActionResult<IEnumerable<Events>>> FindAll()
         {
-            var events = await _repository.FindAll();
+            int userID = Int32.Parse(User.Identity.Name);
+            var events = await _repository.FindAll(userID);
             return Ok(events);
         }
 
@@ -37,10 +38,8 @@ namespace API.Controllers
         [Authorize]
         public async Task<ActionResult<EventsVO>> Create(EventsVO vo)
         {
-            if(User.Identity.Name  == null)
-                return BadRequest();
-            vo.PersonId =  Int16.Parse(User.Identity.Name);
             if (vo == null) return BadRequest();
+            vo.PersonId =  Int16.Parse(User.Identity.Name);
 
             var events = await _repository.Create(vo);
             return Ok(events);

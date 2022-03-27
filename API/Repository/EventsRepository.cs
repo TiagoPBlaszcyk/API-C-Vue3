@@ -18,10 +18,10 @@ namespace API.Repository
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<EventsVO>> FindAll()
+        public async Task<IEnumerable<Events>> FindAll(int userId)
         {
-            List<Events> events = await _context.Events.ToListAsync();
-            return _mapper.Map<List<EventsVO>>(events);
+            List<Events> events = await _context.Events.Where(p => p.PersonId == userId).ToListAsync();
+            return _mapper.Map<List<Events>>(events);
         }
 
         public async Task<EventsVO> FindById(long id)
@@ -35,6 +35,7 @@ namespace API.Repository
 
         public async Task<EventsVO> Create(EventsVO vo)
         {
+            vo.StartDay = Convert.ToDateTime(vo.StartDay);
             Events events = _mapper.Map<Events>(vo);
             _context.Events.Add(events);
             await _context.SaveChangesAsync();

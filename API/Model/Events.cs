@@ -8,8 +8,9 @@ namespace API.Model
     public class Events : BaseEntity
     {
         [Column("name")]
+        [Required]
         [StringLength(150)]
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         [Column("category")]
         [StringLength(150)]
@@ -17,11 +18,11 @@ namespace API.Model
 
         [Column("date")]
         [Range(1, 20)]
-        public string? Date { get; set; }
+        public DateTime? StartDay { get; set; }
 
         [Column("state")]
         [StringLength(20)]
-        public string? State { get; set; }
+        public string State { get; set; }
 
         public int? PersonId {get; set; }
         [ForeignKey("PersonId")]

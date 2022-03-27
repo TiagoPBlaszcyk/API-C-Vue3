@@ -5,7 +5,7 @@ namespace API.Repository
 {
     public interface IEventsRepository
     {
-        Task<IEnumerable<EventsVO>> FindAll();
+        Task<IEnumerable<Events>> FindAll(int userID);
         Task<EventsVO> FindById(long id);
         Task<EventsVO> Create(EventsVO vo);
         Task<EventsVO> Update(EventsVO vo);
