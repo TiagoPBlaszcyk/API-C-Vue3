@@ -17,7 +17,8 @@ namespace API.Model
         public string? Category { get; set; }       
 
         [Column("date")]
-        [Range(1, 20)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? StartDay { get; set; }
 
         [Column("state")]

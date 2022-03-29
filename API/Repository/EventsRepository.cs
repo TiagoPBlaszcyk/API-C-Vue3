@@ -1,4 +1,5 @@
-﻿using API.Data.ValueObjects;
+﻿using System.Globalization;
+using API.Data.ValueObjects;
 using API.Model;
 using API.Model.Context;
 using AutoMapper;
@@ -24,13 +25,13 @@ namespace API.Repository
             return _mapper.Map<List<Events>>(events);
         }
 
-        public async Task<EventsVO> FindById(long id)
+        public async Task<Events> FindById(long id)
         {
 
             Events events = await _context.Events.Where(p => p.Id == id).FirstOrDefaultAsync();
             if (events == null) throw new InvalidOperationException($"Não encontrado!");
             
-            return _mapper.Map<EventsVO>(events);
+            return _mapper.Map<Events>(events);
         }
 
         public async Task<EventsVO> Create(EventsVO vo)

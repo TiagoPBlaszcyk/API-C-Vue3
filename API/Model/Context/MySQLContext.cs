@@ -38,9 +38,9 @@ namespace API.Model.Context
                 Email = "admin@admin.com.br",
                 Senha = "admin",
                 Cpf = "11122233344",
-                PermissaoId = 1,
                 WhatsApp = 11233445566,
-                ImageUrl = "http://google.com.br"
+                ImageUrl = "http://google.com.br",
+                PermissaoId = 1
             });
         }
     }
