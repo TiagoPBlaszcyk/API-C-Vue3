@@ -1,25 +1,10 @@
-import { reactive, readonly } from 'vue'
+import { reactive } from 'vue'
+
 // Full realtive
 const prop = reactive({
-  visibleRight: false,
-  visibleLeft: false,
+  visible: false,
+  newModel: false,
 })
-
-
-// Get and Set readonly
-const state = reactive({
-  teste: 'Abc123'
-})
-const setters = {
-  setTeste(val: string): void {
-    state.teste = val
-  }
-}
-const getters = {
-  getTeste(): string {
-    return state.teste
-  }
-}
 
 const methods = {
   upperCaseFirstCharacter(val: string): string {
@@ -28,19 +13,6 @@ const methods = {
 }
 
 export default {
-  state: readonly(state),
   prop,
-  methods,
-  getters,
-  setters
+  methods
 }
-
-// Exemplo de computed
-// const usoNoVueSetup = computed({
-//   get(){
-//     return storage.getters.getTeste()
-//   },
-//   set(val: string){
-//     storage.setters.setTeste(val)
-//   }
-// })

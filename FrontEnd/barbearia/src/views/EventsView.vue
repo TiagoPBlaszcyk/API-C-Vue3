@@ -13,7 +13,7 @@
         iconPos='right'
         class='p-mt-3'
         label='Adicionar'
-        @click='storage.prop.visibleLeft = true'
+        @click='storage.prop.visible = true; storage.prop.newModel = true'
       />
       <div>
         <DataTable
@@ -22,7 +22,7 @@
           v-model:selection='selected'
           selectionMode='single'
           dataKey='Id'
-          @rowSelect='storage.prop.visibleRight = true'
+          @rowSelect='getById($event)'
         >
           <Column
             v-for='col of columns'
@@ -35,16 +35,10 @@
       </div>
     </div>
     <Sidebar
-      id='edit'
-      v-model:visible='storage.prop.visibleRight'
-      position='right'
-    >
-      <h5>{{ selected }}</h5>
-    </Sidebar>
-    <Sidebar
       id='new'
-      v-model:visible='storage.prop.visibleLeft'
-      position='left'
+      v-model:visible='storage.prop.visible'
+      :position='storage.prop.newModel? `left`:`right`'
+      @hide='storage.prop.newModel = false'
     >
       <div class='p-d-flex p-flex-column p-mb-2 p-mt-2 '>
         <div class=''>
@@ -75,9 +69,9 @@
             <span class='p-float-label'>
               <Calendar id='inputData'
                         v-model='events.StartDay'
-                        dateFormat="dd/mm/yy"
-                        selectionMode="single"
-                        :showIcon="true"
+                        dateFormat='dd/mm/yy'
+                        selectionMode='single'
+                        :showIcon='true'
               />
               <label for='inputData'>Data</label>
             </span>
@@ -100,8 +94,8 @@
           </div>
         </div>
         <div class='p-d-flex p-flex-column p-mt-4'>
-          <Button class='p-mb-3' label='Salvar' @click='saveEvent' />
-          <Button label='Cancelar' @click='storage.prop.visibleLeft = false' />
+          <Button class='p-mb-3' :label='storage.prop.newModel ? `Salvar` : `Editar`' @click='storage.prop.newModel ? saveEvent() : editEvent()' />
+          <Button label='Cancelar' @click='storage.prop.visible = false; storage.prop.newModel = false' />
         </div>
       </div>
     </Sidebar>
@@ -109,7 +103,7 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, inject, onMounted, ref } from 'vue'
+import { defineComponent, inject, onMounted, Ref, ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 import { Events, EventsRules } from '@/models/Events'
@@ -120,36 +114,28 @@ export default defineComponent({
   name: 'HomeView',
   components: {},
   setup() {
-    const storage: any = inject('storage')
-    const controller = 'Events'
-    const events = ref(new Events())
-    const v$ = useVuelidate(EventsRules, events.value)
+    const columns = ref([
+      { field: 'Id', header: 'Código' },
+      { field: 'Name', header: 'Name' },
+      { field: 'Category', header: 'Categoria' },
+      { field: 'StartDay', header: 'Data' },
+      { field: 'State', header: 'Status' }
+    ])
     const status = [
       { id: 1, state: 'Aberto' },
       { id: 2, state: 'Cancelado' },
       { id: 3, state: 'Concluído' }
     ]
+    const storage: any = inject('storage')
+    const controller = 'Events'
+    const events = ref(new Events())
+    const v$ = useVuelidate(EventsRules, events.value)
     const toast = useToast()
     const confirmDialog = useConfirm()
-    const data = ref([
-      {
-        id: 1009,
-        name: 'Gaming Set',
-        category: 'Electronics',
-        date: '25/10/2010',
-        state: 'DONE'
-      }
-    ])
+    const data: Ref<Array<Events>> = ref <Array<Events>>([])
     const products = ref(data)
     const selected = ref()
 
-    const columns = ref([
-      { field: 'Id', header: 'Código' },
-      { field: 'Name', header: 'Name' },
-      { field: 'Category', header: 'Categoria' },
-      { field: 'Date', header: 'Data' },
-      { field: 'State', header: 'Status' }
-    ])
 
     onMounted(() => {
       getAll()
@@ -158,24 +144,61 @@ export default defineComponent({
       await baseService(controller)
         .getAll()
         .then((result) => {
-            console.log(result)
-            data.value = result
+            for (const resultKey in result) {
+              result[resultKey]['StartDay'] = new Date(result[resultKey]['StartDay'])
+                .toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+            }
+            data.value = result as Array<Events>
           },
           () => {
             toast.add({ severity: 'error', summary: 'Erro', detail: 'Errro!', group: 'erro', life: 1000 })
           })
     }
 
+    const getById = async (event) => {
+      await baseService(controller)
+        .getById(event.data)
+        .then((response) => {
+            console.log('byId', response)
+            events.value = response
+            storage.prop.visible = true
+          },
+          () => {
+            toast.add({ severity: 'error', summary: 'Erro', detail: 'Errro!', group: 'erro', life: 1000 })
+          })
+    }
 
     const saveEvent = async () => {
       if (!v$.value.$invalid) {
-        console.log('Eveent', events.value)
         await baseService(controller)
-          .saveModel(events.value)
+          .saveModel(events.value as Events)
+          .then(() => {
+              storage.prop.newModel = false
+              storage.prop.visible = false
+              events.value = new Events()
+              toast.add({
+                severity: 'success',
+                summary: 'Sucesso!',
+                detail: 'Salvo em banco de dados',
+                group: 'save',
+                life: 1000
+              })
+            },
+            () => {
+              toast.add({ severity: 'error', summary: 'Erro', detail: 'Errro!', group: 'erro', life: 1000 })
+            })
+      } else {
+        toast.add({ severity: 'error', summary: 'Erro', detail: 'Revise o formulario', group: 'erro', life: 3000 })
+      }
+    }
+    const editEvent = async () => {
+      if (!v$.value.$invalid) {
+        await baseService(controller)
+          .editModel(events.value)
           .then((result) => {
               console.log(result)
-              storage.prop.visibleLeft = false
-            events.value = new Events()
+              storage.prop.visible = false
+              events.value = new Events()
               toast.add({
                 severity: 'success',
                 summary: 'Sucesso!',
@@ -197,10 +220,12 @@ export default defineComponent({
       v$,
       toast,
       getAll,
+      getById,
       confirmDialog,
       selected,
       status,
       saveEvent,
+      editEvent,
       events,
       columns,
       products

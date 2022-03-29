@@ -4,12 +4,12 @@ export default (service: string) => {
   const baseUrl = 'api/v1/'
 
   const getById = async (model) => {
-    return await services().get(`${baseUrl + service}/${model.id}`)
+    return await services().get(`${baseUrl + service}/${model.Id}`)
       .then((response) => {
         return response.data
       })
       .catch((error) => {
-        console.log('Get: id enviada ->', model.id)
+        console.log('Get: id enviada ->', model.Id)
         console.log('Erro get catch (error)', error.response)
       })
   }
@@ -78,12 +78,12 @@ export default (service: string) => {
 
   const deleteModel = async (model) => {
     return await services()
-      .delete(`${baseUrl + service}/${model.id}`)
+      .delete(`${baseUrl + service}/${model.Id}`)
       .then((r) => {
         return r
       })
       .catch((error) => {
-        console.log('Delete: id enviado ->', model.id)
+        console.log('Delete: id enviado ->', model.Id)
         console.log('Erro Delete catch (error)', error.response)
       })
   }
