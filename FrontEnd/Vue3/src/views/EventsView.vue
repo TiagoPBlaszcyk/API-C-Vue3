@@ -5,13 +5,16 @@
       style='height: 100vh'
     >
       <h1>Eventos</h1>
-      <Button
-        icon='pi pi-save'
-        iconPos='right'
-        class='p-mt-3'
-        label='Adicionar'
-        @click='newEvent()'
-      />
+      <div>
+        <Button
+          icon='pi pi-save'
+          iconPos='right'
+          class='p-mt-3'
+          label='Adicionar'
+          @click='newEvent()'
+        />
+        <Button class='p-ml-2' label='Atualizar' @click='getAll' />
+      </div>
       <div>
         <DataTable
           :value='data'
@@ -28,7 +31,6 @@
             :key='col.field'
           ></Column>
         </DataTable>
-        <Button class='p-mb-3' label='Atualizar' @click='getAll' />
       </div>
     </div>
     <Sidebar
@@ -94,6 +96,7 @@
           <Button class='p-mb-3' :label='store.prop.newModel ? `Salvar` : `Editar`'
                   @click='store.prop.newModel ? saveEvent() : editEvent()' />
           <Button label='Cancelar' @click='store.prop.visible = false; store.prop.newModel = false' />
+          <Button label='Excluir' v-if='!store.prop.newModel' @click='deleteEvent()' />
         </div>
       </div>
     </Sidebar>
@@ -141,7 +144,6 @@ export default defineComponent({
       await baseService(controller)
         .getAll()
         .then((result) => {
-            console.log('aaa', result)
             for (const resultKey in result) {
               result[resultKey]['StartDay'] = new Date(result[resultKey]['StartDay'])
                 .toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' })
@@ -156,9 +158,8 @@ export default defineComponent({
     const rowSelect = async (event) => {
       await baseService(controller)
         .getById(event.data)
-        .then((response) => {
-            console.log('byId', response)
-            events.value = response as Events
+        .then((result) => {
+            events.value = result as Events
             store.prop.visible = true
           },
           () => {
@@ -174,30 +175,37 @@ export default defineComponent({
               store.prop.newModel = false
               store.prop.visible = false
               events.value = new Events()
-              store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Success, 'Sucesso!', 'Salvo em banco de dados', 'main', 2000)
             },
             () => {
               store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Erro', 'Errro!', 'main', 2000)
             })
       } else {
-        store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Erro', 'Revise o formulario', 'main', 2000)
+        store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Campos Inválidos', 'Revise o formulario', 'main', 2000)
       }
+    }
+    const deleteEvent = async () => {
+      await baseService(controller)
+        .deleteModel(events.value)
+        .then(() => {
+            store.prop.visible = false
+          },
+          () => {
+            store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Erro', 'Erro', 'main', 2000)
+          })
     }
     const editEvent = async () => {
       if (!v$.value.$invalid) {
         await baseService(controller)
           .editModel(events.value)
-          .then((result) => {
-              console.log(result)
+          .then(() => {
               store.prop.visible = false
               events.value = new Events()
-              store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Success, 'Sucesso!', 'Salvo em banco de dados', 'main', 2000)
             },
             () => {
               store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Erro', 'Erro', 'main', 2000)
             })
       } else {
-        store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Erro', 'Revise o formulario', 'main', 2000)
+        store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Campos Inválidos', 'Revise o formulario', 'main', 2000)
       }
     }
 
@@ -219,6 +227,7 @@ export default defineComponent({
       data,
       saveEvent,
       editEvent,
+      deleteEvent,
       events,
       columns
     }

@@ -1,8 +1,5 @@
 <template>
   <div class='p-d-flex p-jc-center p-align-center p-flex-column'>
-    <Toast position="top-left" group="save" />
-    <Toast position="top-left" group="erro" />
-    <Toast position="top-left" group="login" />
     <div>
       <h1 class='p-text-center p-mb-6'>{{ register ? 'Cadastro' : 'Login' }}</h1>
       <div class=''>
@@ -84,18 +81,19 @@
 <script lang='ts'>
 import { computed, defineComponent, reactive, ref } from 'vue'
 import { helpers, required, sameAs } from '@vuelidate/validators'
-import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 import useVuelidate from '@vuelidate/core'
 import baseService from '@/service/base.service'
 import router from '@/router'
+import { EToastSeverity } from '@/Enums/ToastSeverity'
+import { useStore } from '@/store/store'
 
 export default defineComponent({
   name: 'LoginView',
   components: {},
   setup() {
-    const toast = useToast()
     const confirmDialog = useConfirm()
+    const store = useStore()
     const register = ref(false)
     const controller = 'Login'
     const state = reactive({
@@ -121,7 +119,7 @@ export default defineComponent({
     const v$ = useVuelidate(rules, state)
 
     const newRegister = async () => {
-      if(!v$.value.$invalid){
+      if (!v$.value.$invalid) {
         await baseService(controller)
           .newPerson(
             {
@@ -129,19 +127,17 @@ export default defineComponent({
               Senha: state.senha
             }
           )
-          .then((result) => {
-            console.log(result)
+          .then(() => {
             register.value = false
             router.push('/')
-            toast.add({severity:'success', summary: 'Sucesso!', detail:'Salvo em banco de dados', group: 'save', life: 3000})
           })
-      }else{
-        toast.add({severity:'error', summary:'Erro', detail:'Revise o formulario', group: 'erro', life: 2000})
+      } else {
+        store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Campos Inválidos', 'Revise o formulario', 'main', 2000)
       }
     }
 
     const login = async () => {
-      if(!v$.value.$invalid) {
+      if (!v$.value.$invalid) {
         await baseService(controller)
           .login(
             {
@@ -150,7 +146,7 @@ export default defineComponent({
             }
           )
           .then((result) => {
-            if (result.token) {
+            if (result?.token) {
               localStorage.setItem('Authorization', result.token)
               router.push('/Home')
             } else {
@@ -158,8 +154,8 @@ export default defineComponent({
               router.push('/')
             }
           })
-      }else {
-        toast.add({severity:'error', summary:'Erro', detail:'Revise o formulario', group: 'erro', life: 2000})
+      } else {
+        store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Campos Inválidos', 'Revise o formulario', 'main', 2000)
       }
     }
 
@@ -167,7 +163,6 @@ export default defineComponent({
       v$,
       state,
       login,
-      toast,
       confirmDialog,
       newRegister,
       register

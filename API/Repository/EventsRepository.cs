@@ -21,7 +21,7 @@ namespace API.Repository
 
         public async Task<IEnumerable<EventsVO>> FindAll(int userId)
         {
-            List<Events> events = await _context.Events.Where(p => p.Id == userId).ToListAsync();
+            List<Events> events = await _context.Events.Where(p => p.PersonId == userId).ToListAsync();
             return _mapper.Map<IEnumerable<EventsVO>>(events);
         }
 
