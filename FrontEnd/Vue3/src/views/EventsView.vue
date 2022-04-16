@@ -13,16 +13,16 @@
         iconPos='right'
         class='p-mt-3'
         label='Adicionar'
-        @click='storage.prop.visible = true; storage.prop.newModel = true'
+        @click='newEvent()'
       />
       <div>
         <DataTable
-          :value='products'
+          :value='data'
           responsiveLayout='scroll'
           v-model:selection='selected'
           selectionMode='single'
           dataKey='Id'
-          @rowSelect='getById($event)'
+          @rowSelect='rowSelect($event)'
         >
           <Column
             v-for='col of columns'
@@ -41,6 +41,13 @@
       @hide='storage.prop.newModel = false'
     >
       <div class='p-d-flex p-flex-column p-mb-2 p-mt-2 '>
+
+        <div class='' v-if='!storage.prop.newModel'>
+          <div class='p-mt-4'>
+            <p id='inputId'>Id: {{ events.Id }}</p>
+          </div>
+        </div>
+
         <div class=''>
           <div class='p-mt-4'>
             <span class='p-float-label'>
@@ -94,7 +101,8 @@
           </div>
         </div>
         <div class='p-d-flex p-flex-column p-mt-4'>
-          <Button class='p-mb-3' :label='storage.prop.newModel ? `Salvar` : `Editar`' @click='storage.prop.newModel ? saveEvent() : editEvent()' />
+          <Button class='p-mb-3' :label='storage.prop.newModel ? `Salvar` : `Editar`'
+                  @click='storage.prop.newModel ? saveEvent() : editEvent()' />
           <Button label='Cancelar' @click='storage.prop.visible = false; storage.prop.newModel = false' />
         </div>
       </div>
@@ -128,12 +136,11 @@ export default defineComponent({
     ]
     const storage: any = inject('storage')
     const controller = 'Events'
-    const events = ref(new Events())
-    const v$ = useVuelidate(EventsRules, events.value)
+    const events = ref()
+    const v$ = useVuelidate(EventsRules, events)
     const toast = useToast()
     const confirmDialog = useConfirm()
-    const data: Ref<Array<Events>> = ref <Array<Events>>([])
-    const products = ref(data)
+    const data: Ref<Array<Events>> = ref<Array<Events>>([])
     const selected = ref()
 
 
@@ -144,6 +151,7 @@ export default defineComponent({
       await baseService(controller)
         .getAll()
         .then((result) => {
+            console.log('aaa', result)
             for (const resultKey in result) {
               result[resultKey]['StartDay'] = new Date(result[resultKey]['StartDay'])
                 .toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' })
@@ -155,12 +163,12 @@ export default defineComponent({
           })
     }
 
-    const getById = async (event) => {
+    const rowSelect = async (event) => {
       await baseService(controller)
         .getById(event.data)
         .then((response) => {
             console.log('byId', response)
-            events.value = response
+            events.value = response as Events
             storage.prop.visible = true
           },
           () => {
@@ -215,20 +223,27 @@ export default defineComponent({
       }
     }
 
+    const newEvent =  () => {
+      events.value = new Events()
+      storage.prop.visible = true
+      storage.prop.newModel = true
+    }
+
     return {
       storage,
       v$,
       toast,
+      newEvent,
       getAll,
-      getById,
+      rowSelect,
       confirmDialog,
       selected,
       status,
+      data,
       saveEvent,
       editEvent,
       events,
-      columns,
-      products
+      columns
     }
   }
 })

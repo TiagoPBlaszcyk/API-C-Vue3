@@ -45,7 +45,7 @@ export default (service: string) => {
       .then((response) => {
         return response.data
       })
-      .catch((erro) => {
+      .catch(() => {
         console.log('Post: Model enviada ->', model)
         alert('Tente Novamente!')
       })
@@ -65,6 +65,7 @@ export default (service: string) => {
   }
 
   const editModel = async (model) => {
+    console.log('editModel', model)
     return await services()
       .put(`${baseUrl + service}`, model)
       .then((response) => {

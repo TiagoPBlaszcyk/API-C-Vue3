@@ -18,7 +18,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<Events>>> FindAll()
+        public async Task<ActionResult<IEnumerable<EventsVO>>> FindAll()
         {
             int userID = Int32.Parse(User.Identity.Name);
             var events = await _repository.FindAll(userID);

@@ -155,22 +155,22 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Model.Events", b =>
                 {
-                    b.HasOne("API.Model.Person", "id")
+                    b.HasOne("API.Model.Person", "Person")
                         .WithMany()
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("id");
+                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("API.Model.Person", b =>
                 {
-                    b.HasOne("API.Model.Permission", "id")
+                    b.HasOne("API.Model.Permission", "Permission")
                         .WithMany()
                         .HasForeignKey("PermissaoId");
 
-                    b.Navigation("id");
+                    b.Navigation("Permission");
                 });
 #pragma warning restore 612, 618
         }

@@ -19,19 +19,19 @@ namespace API.Repository
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Events>> FindAll(int userId)
+        public async Task<IEnumerable<EventsVO>> FindAll(int userId)
         {
-            List<Events> events = await _context.Events.Where(p => p.PersonId == userId).ToListAsync();
-            return _mapper.Map<List<Events>>(events);
+            List<Events> events = await _context.Events.Where(p => p.Id == userId).ToListAsync();
+            return _mapper.Map<IEnumerable<EventsVO>>(events);
         }
 
-        public async Task<Events> FindById(long id)
+        public async Task<EventsVO> FindById(long id)
         {
 
             Events events = await _context.Events.Where(p => p.Id == id).FirstOrDefaultAsync();
             if (events == null) throw new InvalidOperationException($"Não encontrado!");
             
-            return _mapper.Map<Events>(events);
+            return _mapper.Map<EventsVO>(events);
         }
 
         public async Task<EventsVO> Create(EventsVO vo)
