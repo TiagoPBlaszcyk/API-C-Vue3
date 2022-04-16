@@ -185,7 +185,6 @@
 import {
   computed,
   defineComponent,
-  inject,
   onMounted,
   reactive,
   ref
@@ -197,19 +196,20 @@ import router from '@/router'
 import baseService from '@/service/base.service'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
+import { useStore } from '@/store/store'
 
 export default defineComponent({
   name: 'PersonView',
   components: {},
   setup() {
-    const storage = inject('storage')
+    const store = useStore()
     const list = ref<Array<Person>>([])
     const controller = router.currentRoute.value.path.substring(1)
     const loading = ref()
     const toast = useToast()
     const confirmDialog = useConfirm()
     const showSuccess = () => {
-      toast.add({severity:'success', summary: 'Sucesso!', detail:'Salvo em banco de dados', group: 'save', life: 3000})
+      toast.add({severity:'success', summary: 'Sucessoss!', detail:'Salvo em banco de dados', group: 'save', life: 3000})
     }
 
     const confirm2 = () => {
@@ -401,7 +401,7 @@ export default defineComponent({
       state,
       v$,
       loading,
-      storage,
+      store,
       list,
       confirm2,
       change,

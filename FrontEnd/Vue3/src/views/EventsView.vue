@@ -1,8 +1,5 @@
 <template>
   <div>
-    <Toast position='top-center' group='save' />
-    <Toast position='top-center' group='erro' />
-    <Toast position='top-center' group='info' />
     <div
       class='p-d-flex p-justify-start p-align-center p-flex-column'
       style='height: 100vh'
@@ -36,18 +33,11 @@
     </div>
     <Sidebar
       id='new'
-      v-model:visible='storage.prop.visible'
-      :position='storage.prop.newModel? `left`:`right`'
-      @hide='storage.prop.newModel = false'
+      v-model:visible='store.prop.visible'
+      :position='store.prop.newModel? `left`:`right`'
+      @hide='store.prop.newModel = false'
     >
       <div class='p-d-flex p-flex-column p-mb-2 p-mt-2 '>
-
-        <div class='' v-if='!storage.prop.newModel'>
-          <div class='p-mt-4'>
-            <p id='inputId'>Id: {{ events.Id }}</p>
-          </div>
-        </div>
-
         <div class=''>
           <div class='p-mt-4'>
             <span class='p-float-label'>
@@ -101,9 +91,9 @@
           </div>
         </div>
         <div class='p-d-flex p-flex-column p-mt-4'>
-          <Button class='p-mb-3' :label='storage.prop.newModel ? `Salvar` : `Editar`'
-                  @click='storage.prop.newModel ? saveEvent() : editEvent()' />
-          <Button label='Cancelar' @click='storage.prop.visible = false; storage.prop.newModel = false' />
+          <Button class='p-mb-3' :label='store.prop.newModel ? `Salvar` : `Editar`'
+                  @click='store.prop.newModel ? saveEvent() : editEvent()' />
+          <Button label='Cancelar' @click='store.prop.visible = false; store.prop.newModel = false' />
         </div>
       </div>
     </Sidebar>
@@ -111,12 +101,13 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, inject, onMounted, Ref, ref } from 'vue'
-import { useToast } from 'primevue/usetoast'
+import { defineComponent, onMounted, Ref, ref } from 'vue'
 import { useConfirm } from 'primevue/useconfirm'
 import { Events, EventsRules } from '@/models/Events'
 import useVuelidate from '@vuelidate/core'
 import baseService from '@/service/base.service'
+import { useStore } from '@/store/store'
+import { EToastSeverity } from '@/Enums/ToastSeverity'
 
 export default defineComponent({
   name: 'HomeView',
@@ -134,11 +125,10 @@ export default defineComponent({
       { id: 2, state: 'Cancelado' },
       { id: 3, state: 'Concluído' }
     ]
-    const storage: any = inject('storage')
+    const store = useStore()
     const controller = 'Events'
     const events = ref()
     const v$ = useVuelidate(EventsRules, events)
-    const toast = useToast()
     const confirmDialog = useConfirm()
     const data: Ref<Array<Events>> = ref<Array<Events>>([])
     const selected = ref()
@@ -159,7 +149,7 @@ export default defineComponent({
             data.value = result as Array<Events>
           },
           () => {
-            toast.add({ severity: 'error', summary: 'Erro', detail: 'Errro!', group: 'erro', life: 1000 })
+            store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Success, 'Erro', 'Errro!', 'main', 2000)
           })
     }
 
@@ -169,10 +159,10 @@ export default defineComponent({
         .then((response) => {
             console.log('byId', response)
             events.value = response as Events
-            storage.prop.visible = true
+            store.prop.visible = true
           },
           () => {
-            toast.add({ severity: 'error', summary: 'Erro', detail: 'Errro!', group: 'erro', life: 1000 })
+            store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Erro', 'Errro!', 'main', 2000)
           })
     }
 
@@ -181,22 +171,16 @@ export default defineComponent({
         await baseService(controller)
           .saveModel(events.value as Events)
           .then(() => {
-              storage.prop.newModel = false
-              storage.prop.visible = false
+              store.prop.newModel = false
+              store.prop.visible = false
               events.value = new Events()
-              toast.add({
-                severity: 'success',
-                summary: 'Sucesso!',
-                detail: 'Salvo em banco de dados',
-                group: 'save',
-                life: 1000
-              })
+              store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Success, 'Sucesso!', 'Salvo em banco de dados', 'main', 2000)
             },
             () => {
-              toast.add({ severity: 'error', summary: 'Erro', detail: 'Errro!', group: 'erro', life: 1000 })
+              store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Erro', 'Errro!', 'main', 2000)
             })
       } else {
-        toast.add({ severity: 'error', summary: 'Erro', detail: 'Revise o formulario', group: 'erro', life: 3000 })
+        store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Erro', 'Revise o formulario', 'main', 2000)
       }
     }
     const editEvent = async () => {
@@ -205,34 +189,27 @@ export default defineComponent({
           .editModel(events.value)
           .then((result) => {
               console.log(result)
-              storage.prop.visible = false
+              store.prop.visible = false
               events.value = new Events()
-              toast.add({
-                severity: 'success',
-                summary: 'Sucesso!',
-                detail: 'Salvo em banco de dados',
-                group: 'save',
-                life: 1000
-              })
+              store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Success, 'Sucesso!', 'Salvo em banco de dados', 'main', 2000)
             },
             () => {
-              toast.add({ severity: 'error', summary: 'Erro', detail: 'Errro!', group: 'erro', life: 1000 })
+              store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Erro', 'Erro', 'main', 2000)
             })
       } else {
-        toast.add({ severity: 'error', summary: 'Erro', detail: 'Revise o formulario', group: 'erro', life: 3000 })
+        store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Erro', 'Revise o formulario', 'main', 2000)
       }
     }
 
-    const newEvent =  () => {
+    const newEvent = () => {
       events.value = new Events()
-      storage.prop.visible = true
-      storage.prop.newModel = true
+      store.prop.visible = true
+      store.prop.newModel = true
     }
 
     return {
-      storage,
+      store,
       v$,
-      toast,
       newEvent,
       getAll,
       rowSelect,

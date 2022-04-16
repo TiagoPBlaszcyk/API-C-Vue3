@@ -1,15 +1,26 @@
 <template>
-  <router-view />
+  <div>
+    <Toast position='top-center' group='main' />
+    <router-view />
+  </div>
 </template>
 <script>
-import { provide } from 'vue'
-import storage from '@/store/storage.ts'
+import { watch } from 'vue'
+import { useStore } from '@/store/store.ts'
+import { useToast } from 'primevue/usetoast'
 
 export default {
   components: {},
   setup() {
     localStorage.setItem('theme', 'primevue/resources/themes/vela-blue/theme.css')
-    provide('storage', storage)
+    const toast = useToast()
+    const store = useStore()
+    watch(
+      () => store.prop.toastMessage,
+      () => {
+        toast.add(store.prop.toastMessage)
+      }
+    )
 
     return {}
   }

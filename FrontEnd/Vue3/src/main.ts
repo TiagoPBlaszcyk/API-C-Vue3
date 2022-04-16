@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import axios from 'axios'
@@ -33,6 +34,7 @@ import '/node_modules/primeflex/primeflex.css'
 import '/node_modules/primeicons/primeicons.css'
 
 createApp(App)
+  .use(createPinia())
   .use(router)
   .use(VueAxios, axios)
   .use(PrimeVue, {
