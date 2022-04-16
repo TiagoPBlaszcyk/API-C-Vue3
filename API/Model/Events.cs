@@ -27,6 +27,6 @@ namespace API.Model
 
         public int? PersonId {get; set; }
         [ForeignKey("PersonId")]
-        public virtual Person id { get; set; }
+        public virtual Person IdPerson { get; set; }
     }
 }

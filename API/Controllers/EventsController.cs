@@ -49,7 +49,7 @@ namespace API.Controllers
         [Authorize]
         public async Task<ActionResult<EventsVO>> Update(EventsVO vo)
         {
-            if (vo == null) return BadRequest();
+            if (vo == null || vo.Id == null) return BadRequest();
             var events = await _repository.Update(vo);
             return Ok(events);
         }

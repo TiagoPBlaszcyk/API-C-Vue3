@@ -6,7 +6,7 @@ namespace API.Model.Base
     public class BaseEntity
     {
         [Key]
-        [Column("id")]
+        [Column("Id")]
         public int Id { get; set; }
     }
 }

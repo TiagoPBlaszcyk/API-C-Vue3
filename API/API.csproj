@@ -10,6 +10,8 @@
     <Compile Remove="Migrations\20220324213835_Start.cs" />
     <Compile Remove="Migrations\20220324213835_Start.Designer.cs" />
     <Compile Remove="Migrations\MySQLContextModelSnapshot.cs" />
+    <Compile Remove="Migrations\20220329010627_Start.cs" />
+    <Compile Remove="Migrations\20220329010627_Start.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

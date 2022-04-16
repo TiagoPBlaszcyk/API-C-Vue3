@@ -23,7 +23,7 @@ namespace API.Model
         
         public int? PermissaoId {get; set; }
         [ForeignKey("PermissaoId")]
-        public virtual Permission id { get; set; }
+        public virtual Permission IdPermission { get; set; }
 
         [Column("cpf")]
         [StringLength(20)]
