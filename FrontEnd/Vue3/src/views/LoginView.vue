@@ -132,7 +132,7 @@ export default defineComponent({
             router.push('/')
           })
       } else {
-        store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Campos Inválidos', 'Revise o formulario', 'main', 2000)
+        store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Warn, 'Campos Inválidos', 'Revise o formulario', 'main', 2000)
       }
     }
 
@@ -155,7 +155,7 @@ export default defineComponent({
             }
           })
       } else {
-        store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Campos Inválidos', 'Revise o formulario', 'main', 2000)
+        store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Warn, 'Campos Inválidos', 'Revise o formulario', 'main', 2000)
       }
     }
 

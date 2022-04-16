@@ -8,6 +8,7 @@ export default (service: string) => {
   const getById = async (model) => {
     return await services().get(`${baseUrl + service}/${model.Id}`)
       .then((response) => {
+        console.log('getById response',response)
         return response.data
       })
       .catch((error) => {
@@ -21,6 +22,7 @@ export default (service: string) => {
     return await services()
       .get(`${baseUrl + service}`)
       .then((response) => {
+        console.log('getAll response',response)
         return response.data
       })
       .catch((error) => {
@@ -34,7 +36,7 @@ export default (service: string) => {
     return await services()
       .post(`${baseUrl + service}`, model)
       .then((response) => {
-          console.log(response)
+          console.log('SaveModel response',response)
         if(response.status == 200){
           store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Success, 'Sucesso!', 'Salvo em banco de dados', 'main', 2000)
         }
@@ -51,6 +53,7 @@ export default (service: string) => {
     return await services()
       .post(`${baseUrl + service}`, model)
       .then((response) => {
+        console.log('login response',response)
         return response.data
       })
       .catch((error) => {
@@ -63,7 +66,8 @@ export default (service: string) => {
     return await services()
       .post(`${baseUrl + service}/Cadastro`, model)
       .then((response) => {
-        if(response.status == 201) {
+        console.log('newPerson response',response)
+        if(response.status != 200) {
           store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Info, 'Falha!', response.data.detail, 'main', 3000)
         }
         return response.data
@@ -75,10 +79,10 @@ export default (service: string) => {
   }
 
   const editModel = async (model) => {
-    console.log('editModel', model)
     return await services()
       .put(`${baseUrl + service}`, model)
       .then((response) => {
+        console.log('editModel response',response)
         if(response.status == 200){
           store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Success, 'Sucesso!', 'Salvo em banco de dados', 'main', 2000)
         }
@@ -95,6 +99,7 @@ export default (service: string) => {
     return await services()
       .delete(`${baseUrl + service}/${model.Id}`)
       .then((response) => {
+        console.log('deleteModel response',response)
         if(response.status == 200){
           store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Info, 'Deletado com sucesso!', 'Excluido do banco de dados', 'main', 2000)
         }

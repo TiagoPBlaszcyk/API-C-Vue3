@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { ptBr } from '@/translations/ptBr'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
@@ -38,6 +39,7 @@ createApp(App)
   .use(router)
   .use(VueAxios, axios)
   .use(PrimeVue, {
+    locale: ptBr,
     ripple: true,
     zIndex: {
       modal: 1100,        //dialog, sidebar

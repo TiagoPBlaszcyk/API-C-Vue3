@@ -6,29 +6,44 @@
     >
       <h1>Eventos</h1>
       <div>
-        <Button
-          icon='pi pi-save'
-          iconPos='right'
-          class='p-mt-3'
-          label='Adicionar'
-          @click='newEvent()'
-        />
-        <Button class='p-ml-2' label='Atualizar' @click='getAll' />
-      </div>
-      <div>
         <DataTable
           :value='data'
           responsiveLayout='scroll'
           v-model:selection='selected'
+          v-model:filters='filters'
+          filterDisplay='menu'
           selectionMode='single'
           dataKey='Id'
           @rowSelect='rowSelect($event)'
         >
+          <template #header>
+            <div class='flex justify-content-between'>
+              <span class='p-input-icon-left p-float-label'>
+                <i class='pi pi-search' />
+                <InputText id='idFilters' v-model="filters['global'].value" />
+                <label for='idFilters'>Filtrar</label>
+              </span>
+              <Button
+                icon='pi pi-save'
+                iconPos='right'
+                class='p-ml-2'
+                label='Adicionar'
+                @click='newEvent()'
+              />
+            </div>
+          </template>
+          <template #empty>
+            Sem resultados encontrados.
+          </template>
+          <template #loading>
+            Loading customers data. Please wait.
+          </template>
           <Column
             v-for='col of columns'
             :field='col.field'
             :header='col.header'
             :key='col.field'
+            :sortable="true"
           ></Column>
         </DataTable>
       </div>
@@ -68,8 +83,8 @@
             <span class='p-float-label'>
               <Calendar id='inputData'
                         v-model='events.StartDay'
-                        dateFormat='dd/mm/yy'
                         selectionMode='single'
+                        :showWeek='true'
                         :showIcon='true'
               />
               <label for='inputData'>Data</label>
@@ -95,8 +110,8 @@
         <div class='p-d-flex p-flex-column p-mt-4'>
           <Button class='p-mb-3' :label='store.prop.newModel ? `Salvar` : `Editar`'
                   @click='store.prop.newModel ? saveEvent() : editEvent()' />
+          <Button class='p-mb-3' label='Excluir' v-if='!store.prop.newModel' @click='deleteEvent()' />
           <Button label='Cancelar' @click='store.prop.visible = false; store.prop.newModel = false' />
-          <Button label='Excluir' v-if='!store.prop.newModel' @click='deleteEvent()' />
         </div>
       </div>
     </Sidebar>
@@ -111,6 +126,8 @@ import useVuelidate from '@vuelidate/core'
 import baseService from '@/service/base.service'
 import { useStore } from '@/store/store'
 import { EToastSeverity } from '@/Enums/ToastSeverity'
+import { EStatus } from '@/Enums/Status'
+import { FilterMatchMode } from 'primevue/api'
 
 export default defineComponent({
   name: 'HomeView',
@@ -118,15 +135,15 @@ export default defineComponent({
   setup() {
     const columns = ref([
       { field: 'Id', header: 'Código' },
-      { field: 'Name', header: 'Name' },
+      { field: 'Name', header: 'Nome' },
       { field: 'Category', header: 'Categoria' },
       { field: 'StartDay', header: 'Data' },
       { field: 'State', header: 'Status' }
     ])
     const status = [
-      { id: 1, state: 'Aberto' },
-      { id: 2, state: 'Cancelado' },
-      { id: 3, state: 'Concluído' }
+      { id: 1, state: EStatus.Aberto },
+      { id: 2, state: EStatus.Cancelado },
+      { id: 3, state: EStatus.Concluido }
     ]
     const store = useStore()
     const controller = 'Events'
@@ -134,12 +151,18 @@ export default defineComponent({
     const v$ = useVuelidate(EventsRules, events)
     const confirmDialog = useConfirm()
     const data: Ref<Array<Events>> = ref<Array<Events>>([])
+    const filters = ref({ global: { value: '', matchMode: FilterMatchMode.CONTAINS } })
     const selected = ref()
 
+    function toDate(dateStr) {
+      const parts = dateStr.split('/')
+      return new Date(parts[2], parts[1] - 1, parts[0])
+    }
 
     onMounted(() => {
       getAll()
     })
+
     const getAll = async () => {
       await baseService(controller)
         .getAll()
@@ -159,6 +182,7 @@ export default defineComponent({
       await baseService(controller)
         .getById(event.data)
         .then((result) => {
+            result['StartDay'] = new Date(result['StartDay']).toJSON()
             events.value = result as Events
             store.prop.visible = true
           },
@@ -175,12 +199,13 @@ export default defineComponent({
               store.prop.newModel = false
               store.prop.visible = false
               events.value = new Events()
+              getAll()
             },
             () => {
               store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Erro', 'Errro!', 'main', 2000)
             })
       } else {
-        store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Campos Inválidos', 'Revise o formulario', 'main', 2000)
+        store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Warn, 'Campos Inválidos', 'Revise o formulario', 'main', 2000)
       }
     }
     const deleteEvent = async () => {
@@ -188,6 +213,7 @@ export default defineComponent({
         .deleteModel(events.value)
         .then(() => {
             store.prop.visible = false
+            getAll()
           },
           () => {
             store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Erro', 'Erro', 'main', 2000)
@@ -200,12 +226,13 @@ export default defineComponent({
           .then(() => {
               store.prop.visible = false
               events.value = new Events()
+              getAll()
             },
             () => {
               store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Erro', 'Erro', 'main', 2000)
             })
       } else {
-        store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Error, 'Campos Inválidos', 'Revise o formulario', 'main', 2000)
+        store.prop.toastMessage = store.methods.toastMessage(EToastSeverity.Warn, 'Campos Inválidos', 'Revise o formulario', 'main', 2000)
       }
     }
 
@@ -223,6 +250,7 @@ export default defineComponent({
       rowSelect,
       confirmDialog,
       selected,
+      filters,
       status,
       data,
       saveEvent,
