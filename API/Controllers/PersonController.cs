@@ -48,7 +48,6 @@ namespace API.Controllers
         public async Task<ActionResult<PersonVO>> Create(PersonVO vo)
         {
             if (vo == null) return BadRequest();
-
             var person = await _repository.Create(vo);
             return Ok(person);
         }

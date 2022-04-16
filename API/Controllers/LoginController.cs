@@ -27,6 +27,7 @@ namespace API.Controllers
 
             return Ok(new
             {
+                statusCode = 200,
                 user = model,
                 token = token
             });
@@ -35,12 +36,28 @@ namespace API.Controllers
         [HttpPost]
         [Route("Cadastro")]
         [AllowAnonymous]
-        public async Task<ActionResult<dynamic>> RegisterAsync([FromBody] PersonVO model)
+        public async Task<ActionResult<dynamic>> RegisterAsync([FromBody] PersonVO vo)
         {
-            if (model == null) return BadRequest();
-            PersonVO person = await _repository.Create(model);
+            if (vo == null) return BadRequest();
+            
+            var exist = await _repository.FindByName(vo.Name);
 
-            return Ok(person);
+            if (exist == null)
+            {
+                PersonVO person = await _repository.Create(vo);
+                return Ok(person);
+            }
+            else
+            {
+                if (vo.Senha == exist.Senha)
+                {
+                    return  Problem(detail:"Você já possui cadastro", statusCode: 201);
+                }
+                else
+                {
+                    return  Problem(detail:"Usuário já existe!", statusCode: 201);
+                }
+            }
         }
     }
 }
