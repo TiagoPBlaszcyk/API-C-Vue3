@@ -148,7 +148,7 @@ export default defineComponent({
           .then((result) => {
             if (result?.token) {
               localStorage.setItem('Authorization', result.token)
-              router.push('/Home')
+              router.push('/Eventos')
             } else {
               localStorage.clear()
               router.push('/')

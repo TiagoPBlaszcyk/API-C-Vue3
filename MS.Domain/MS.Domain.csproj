@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="Class1.cs" />
+      <Compile Remove="Generics\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MS.Entities\MS.Entities.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Generics\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Generics\**" />
+    </ItemGroup>
+
+</Project>

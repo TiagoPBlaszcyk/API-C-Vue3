@@ -1,11 +1,10 @@
-﻿using API.Data.ValueObjects;
-using API.Model;
-using API.Model.Context;
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using MS.Domain.IPerson;
+using MS.Entities.Person;
+using MS.Infra.Data.Context;
 
-namespace API.Repository
+namespace MS.Infra.Data.Repository.Persons
 {
     public class PersonRepository : IPersonRepository
     {
@@ -28,7 +27,7 @@ namespace API.Repository
         public async Task<PersonVO> FindById(long id)
         {
 
-            Person person = await _context.Persons.Where(p => p.Id == id).FirstOrDefaultAsync();
+            Person? person = await _context.Persons.Where(p => p.Id == id).FirstOrDefaultAsync();
             if (person == null) throw new InvalidOperationException($"Não encontrado!");
             
             return _mapper.Map<PersonVO>(person);
@@ -36,8 +35,7 @@ namespace API.Repository
 
         public async Task<Person> FindByName(string name)
         {
-
-            Person person = await _context.Persons.Where(p => p.Name == name).FirstOrDefaultAsync();
+            Person? person = await _context.Persons.Where(p => p.Name == name).FirstOrDefaultAsync();
             if (person == null) throw new ArgumentNullException(nameof(person));
             
             return _mapper.Map<Person>(person);
@@ -73,7 +71,7 @@ namespace API.Repository
         {
             try
             {
-                Person person = await _context.Persons.Where(p => p.Id == id).FirstOrDefaultAsync();
+                Person? person = await _context.Persons.Where(p => p.Id == id).FirstOrDefaultAsync();
                 if (person == null) return false;
                 _context.Persons.Remove(person);
                 await _context.SaveChangesAsync();
