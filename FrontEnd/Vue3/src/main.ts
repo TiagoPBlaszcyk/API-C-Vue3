@@ -69,3 +69,6 @@ createApp(App)
   .component('Password', Password)
   .component('Divider', Divider)
   .mount('#app')
+
+// TODO: Abstract fetch
+// TODO: Home

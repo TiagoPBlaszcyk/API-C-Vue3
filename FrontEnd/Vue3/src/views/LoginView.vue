@@ -1,7 +1,7 @@
 <template>
   <div class='p-d-flex p-jc-center p-align-center p-flex-column'>
-    <div>
-      <h1 class='p-text-center p-mb-6'>{{ register ? 'Cadastro' : 'Login' }}</h1>
+    <div v-if='register'>
+      <h1 class='p-text-center p-mb-6'>Cadastro</h1>
       <div class=''>
         <div class='p-inputgroup p-mt-4'>
           <span class='p-inputgroup-addon'><i class='pi pi-user'></i></span>
@@ -61,6 +61,37 @@
         </div>
       </div>
     </div>
+    <div v-else>
+      <h1 class='p-text-center p-mb-6'>Login</h1>
+      <div class=''>
+        <div class='p-inputgroup p-mt-4'>
+          <span class='p-inputgroup-addon'><i class='pi pi-user'></i></span>
+          <span class='p-float-label'>
+              <InputText id='inputname' type='text' v-model='credentials.name' />
+              <label for='inputname'>Nome*</label>
+            </span>
+        </div>
+      </div>
+      <div :class="{ 'p-error': vLogin$.$invalid }" v-if='vLogin$.name'>
+        <div v-for='error of vLogin$.name.$silentErrors' :key='error.$message'>
+          {{ error.$message }}
+        </div>
+      </div>
+      <div class=''>
+        <div class='p-inputgroup p-mt-4'>
+          <span class='p-inputgroup-addon'><i class='pi pi-key'></i></span>
+          <span class='p-float-label'>
+              <Password id='inputconfirmarSenha' v-model='credentials.senha' :feedback='false' toggleMask />
+              <label for='inputconfirmarSenha'>Senha*</label>
+            </span>
+        </div>
+      </div>
+      <div :class="{ 'p-error': vLogin$.$invalid }" v-if='vLogin$.senha'>
+        <div v-for='error of vLogin$.senha.$silentErrors' :key='error.$message'>
+          {{ error.$message }}
+        </div>
+      </div>
+    </div>
     <Button
       :icon='register? `pi pi-sign-in` : `pi pi-database`'
       iconPos='right'
@@ -96,6 +127,10 @@ export default defineComponent({
     const store = useStore()
     const register = ref(false)
     const controller = 'Login'
+    const credentials = reactive({
+      name: null,
+      senha: null
+    })
     const state = reactive({
       name: null,
       senha: null,
@@ -116,7 +151,17 @@ export default defineComponent({
         sameAs: helpers.withMessage('As senhas digitadas não são iguais', sameAs(state.senha))
       }
     }))
+    const loginRules = computed(() => ({
+      name: {
+        required: helpers.withMessage('Preenchimento obrigatório', required)
+      },
+      senha: {
+        required: helpers.withMessage('Preenchimento obrigatório', required),
+        password: helpers.withMessage('Senha fora de padrão', password)
+      }
+    }))
     const v$ = useVuelidate(rules, state)
+    const vLogin$ = useVuelidate(loginRules, credentials)
 
     const newRegister = async () => {
       if (!v$.value.$invalid) {
@@ -137,12 +182,12 @@ export default defineComponent({
     }
 
     const login = async () => {
-      if (!v$.value.$invalid) {
+      if (!vLogin$.value.$invalid) {
         await baseService(controller)
           .login(
             {
-              Name: state.name,
-              Senha: state.senha
+              Name: credentials.name,
+              Senha: credentials.senha
             }
           )
           .then((result) => {
@@ -161,8 +206,10 @@ export default defineComponent({
 
     return {
       v$,
+      vLogin$,
       state,
       login,
+      credentials,
       confirmDialog,
       newRegister,
       register

@@ -14,7 +14,11 @@ export default defineComponent({
   name: 'HomeView',
   components: {},
   setup() {
-    return {  }
+    // TODO: Add
+    // DashBoard
+    // Graficos para exibição de Status
+    // Calendario Drag and Drop
+    return {}
   }
 })
 </script>

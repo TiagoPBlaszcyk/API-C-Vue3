@@ -154,11 +154,6 @@ export default defineComponent({
     const filters = ref({ global: { value: '', matchMode: FilterMatchMode.CONTAINS } })
     const selected = ref()
 
-    function toDate(dateStr) {
-      const parts = dateStr.split('/')
-      return new Date(parts[2], parts[1] - 1, parts[0])
-    }
-
     onMounted(() => {
       getAll()
     })
@@ -182,7 +177,7 @@ export default defineComponent({
       await baseService(controller)
         .getById(event.data)
         .then((result) => {
-            result['StartDay'] = new Date(result['StartDay']).toJSON()
+            result['StartDay'] = new Date(result['StartDay']).toLocaleDateString()
             events.value = result as Events
             store.prop.visible = true
           },
@@ -221,6 +216,7 @@ export default defineComponent({
     }
     const editEvent = async () => {
       if (!v$.value.$invalid) {
+        events.value['StartDay'] = new Date(events.value['StartDay']).toJSON()
         await baseService(controller)
           .editModel(events.value)
           .then(() => {
