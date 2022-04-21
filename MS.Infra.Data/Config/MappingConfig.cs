@@ -1,8 +1,9 @@
-﻿using API.Data.ValueObjects;
-using API.Model;
-using AutoMapper;
+﻿using AutoMapper;
+using MS.Entities.Events;
+using MS.Entities.Login;
+using MS.Entities.Person;
 
-namespace API.Config
+namespace MS.Infra.Data.Config
 {
     public class MappingConfig
     {

@@ -1,15 +1,19 @@
 using System.Text;
-using API;
-using API.Model.Context;
+using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
-using API.Config;
-using API.Repository;
-using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using AutoMapper;
+using API;
+using MS.Domain.IEvents;
+using MS.Domain.IPerson;
+using MS.Infra.Data.Config;
+using MS.Infra.Data.Context;
+using MS.Infra.Data.Repository.EventsRepository;
+using MS.Infra.Data.Repository.Persons;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

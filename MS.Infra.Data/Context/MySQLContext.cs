@@ -11,9 +11,9 @@ namespace MS.Infra.Data.Context
         {
 
         }
-        public DbSet<Person> Persons { get; set; }
-        public DbSet<Permission> Permissions { get; set; }
-        public DbSet<Events> Events { get; set; }
+        public DbSet<Person>? Persons { get; set; }
+        public DbSet<Permission>? Permissions { get; set; }
+        public DbSet<Events>? Events { get; set; }
 
 
         // Adiciona uma base minima para login como permissoes de Administrador e Convidado

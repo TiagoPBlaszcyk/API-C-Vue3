@@ -1,8 +1,7 @@
-﻿using API.Data.ValueObjects;
-using API.Model;
-using API.Repository;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MS.Domain.IEvents;
+using MS.Entities.Events;
 
 namespace API.Controllers
 {

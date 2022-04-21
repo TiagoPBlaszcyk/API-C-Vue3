@@ -2,5 +2,5 @@
 
 public interface IEventsService
 {
-    
+    //TODO: Service
 }

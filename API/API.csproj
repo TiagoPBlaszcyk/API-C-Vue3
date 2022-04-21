@@ -12,6 +12,7 @@
     <Compile Remove="Migrations\MySQLContextModelSnapshot.cs" />
     <Compile Remove="Migrations\20220329010627_Start.cs" />
     <Compile Remove="Migrations\20220329010627_Start.Designer.cs" />
+    <Compile Remove="Migrations\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,8 +31,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations" />
-    <Folder Include="Migrations\" />
+    <ProjectReference Include="..\MS.Domain\MS.Domain.csproj" />
+    <ProjectReference Include="..\MS.Infra.Data\MS.Infra.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Migrations\**" />
   </ItemGroup>
 
 </Project>

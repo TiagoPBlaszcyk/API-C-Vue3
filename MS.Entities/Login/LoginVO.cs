@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace API.Data.ValueObjects
+﻿namespace MS.Entities.Login
 {
     public class LoginVO
     {
