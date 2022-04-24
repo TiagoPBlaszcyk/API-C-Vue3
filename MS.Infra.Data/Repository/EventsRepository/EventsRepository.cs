@@ -19,6 +19,9 @@ namespace MS.Infra.Data.Repository.EventsRepository
 
         public async Task<IEnumerable<EventsVO>> FindAll(int userId)
         {
+            // TODO: Pagination x and y parameters
+            // IQueryable<Events> events = _context.Events;
+            // IEnumerable<Events> resultEvents = events.Take(x..y).Where(p => p.PersonId == userId);
             List<Events> events = await _context.Events.Where(p => p.PersonId == userId).ToListAsync();
             return _mapper.Map<IEnumerable<EventsVO>>(events);
         }

@@ -21,6 +21,9 @@ namespace API.Controllers
         /// </summary>
         /// <returns>List<Person></returns>
         [HttpGet]
+        [ProducesResponseType((200), Type = typeof(List<PersonVO>))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<PersonVO>>> FindAll()
         {
@@ -34,6 +37,9 @@ namespace API.Controllers
         /// <param name="id">Código identificador de Pessoa</param>
         /// <returns>Person</returns>
         [HttpGet("{id}")]
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [Authorize(Roles = "1")]
         public async Task<ActionResult<PersonVO>> FindById(long id)
         {
@@ -43,6 +49,9 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [AllowAnonymous]
         public async Task<ActionResult<PersonVO>> Create(PersonVO vo)
         {
@@ -52,6 +61,9 @@ namespace API.Controllers
         }
 
         [HttpPut]
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [AllowAnonymous]
         public async Task<ActionResult<PersonVO>> Update(PersonVO vo)
         {
@@ -61,6 +73,8 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [Authorize(Roles = "1")]
         public async Task<ActionResult> Delete(long id)
         {

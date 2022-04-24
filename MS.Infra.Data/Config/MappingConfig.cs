@@ -7,6 +7,7 @@ namespace MS.Infra.Data.Config
 {
     public class MappingConfig
     {
+        //TODO: Generic Repository
         public static MapperConfiguration RegisterMaps()
         {
             var mappingConfig = new MapperConfiguration(config =>

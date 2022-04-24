@@ -36,16 +36,15 @@ namespace MS.Infra.Data.Repository.Persons
         public async Task<Person> FindByName(string name)
         {
             Person? person = await _context.Persons.Where(p => p.Name == name).FirstOrDefaultAsync();
-            if (person == null) throw new ArgumentNullException(nameof(person));
+            if (person == null) return null;
             
             return _mapper.Map<Person>(person);
         }
 
         public async Task<PersonVO> Create(PersonVO vo)
         {
-            if (vo.PermissaoId == null)
-                vo.PermissaoId = 2;
             Person person = _mapper.Map<Person>(vo);
+            person.PermissaoId = 2;
             _context.Persons.Add(person);
             await _context.SaveChangesAsync();
             return _mapper.Map<PersonVO>(person);

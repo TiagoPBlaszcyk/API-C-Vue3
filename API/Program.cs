@@ -48,6 +48,20 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        builder   => builder.WithOrigins(
+                "http://localhost:8080",
+                "localhost:8080",
+                "http://localhost",
+                "https://localhost")
+            .AllowAnyMethod()
+            .AllowAnyOrigin()
+            .AllowAnyHeader());
+});
+
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IEventsRepository, EventsRepository>();
 builder.Services.AddControllers().AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = null; options.JsonSerializerOptions.PropertyNameCaseInsensitive = true; });
@@ -81,23 +95,6 @@ builder.Services.AddAuthentication(auth =>
         ValidateAudience = false
     };
 });
-
-
-
-var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-        builder   => builder.WithOrigins(
-                "http://localhost:8080",
-                "localhost:8080",
-                "http://localhost",
-                "https://localhost")
-            .AllowAnyMethod()
-            .AllowAnyOrigin()
-            .AllowAnyHeader());
-});
-
 
 var app = builder.Build();
 

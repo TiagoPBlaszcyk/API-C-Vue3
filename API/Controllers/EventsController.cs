@@ -5,6 +5,8 @@ using MS.Entities.Events;
 
 namespace API.Controllers
 {
+    // TODO: Documentacao Swagger
+    
     [ApiController]
     [Route("api/v1/[controller]")]
     public class EventsController : ControllerBase
@@ -29,7 +31,10 @@ namespace API.Controllers
         public async Task<ActionResult<EventsVO>> FindById(long id)
         {
             var events = await _repository.FindById(id);
-            if (events == null) return NotFound();
+            if (events == null) return BadRequest(new
+            {
+                error = $"Evento com {id} não encontrado"
+            });
             return Ok(events);
         }
 
@@ -48,7 +53,10 @@ namespace API.Controllers
         [Authorize]
         public async Task<ActionResult<EventsVO>> Update(EventsVO vo)
         {
-            if (vo == null || vo.Id == null) return BadRequest();
+            if (vo == null || vo.Id == null) return BadRequest(new
+            {
+                error = $"Evento enviado sem Código Id :("
+            });
             var events = await _repository.Update(vo);
             return Ok(events);
         }

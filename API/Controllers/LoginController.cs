@@ -6,6 +6,9 @@ using MS.Entities.Person;
 
 namespace API.Controllers
 {
+    // TODO: Documentacao Swagger
+    // Table Login Name/Password/Token/ExpireToken
+    
     [ApiController]
     [Route("api/v1/[controller]")]
     public class LoginController : ControllerBase
@@ -21,7 +24,10 @@ namespace API.Controllers
         public async Task<ActionResult> AuthenticateAsync([FromBody] LoginVO model)
         {
             Person person = await _repository.FindByName(model.Name);
-            if (person == null || model.Senha != person.Senha) return BadRequest();
+            if (person == null || model.Senha != person.Senha) return BadRequest(new
+            {
+                error = $"Senha incorreta! :) {person.Senha}"
+            });
 
             var token = TokenService.GenerateToken(person);
 
